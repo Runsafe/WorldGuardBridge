@@ -1,4 +1,5 @@
-Item Control
-============
+Runsafe WorldGuard Bridge
+=========================
 
-Placeholder for the README of ItemControl, currently in development under the Runsafe framework
+In development..
+

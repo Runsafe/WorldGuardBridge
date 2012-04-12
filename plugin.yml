@@ -1,6 +1,5 @@
-name: ItemControl
-main: no.runsafe.ItemControl.ItemControl
+name: RunsafeWorldGuardBridge
+main: no.runsafe.worldguardbridge.Bridge
 version: 1.0
 author: Kruithne
-depend: []
-description: Item control for Minecraft (CraftBukkit)
+description: Bridge between Runsafe Framework and WorldGuard
