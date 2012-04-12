@@ -14,11 +14,12 @@ import org.bukkit.util.Vector;
 
 public class WorldGuardInterface
 {
+    private Server server;
     private WorldGuardPlugin worldGuard;
 
     public WorldGuardInterface(Server server)
     {
-        this.worldGuard = this.getWorldGuard(server);
+        this.server = server;
     }
 
     private WorldGuardPlugin getWorldGuard(Server server)
@@ -33,6 +34,9 @@ public class WorldGuardInterface
 
     public boolean serverHasWorldGuard()
     {
+        if (this.worldGuard == null)
+            this.getWorldGuard(server);
+
         if (this.worldGuard != null)
             return true;
 
