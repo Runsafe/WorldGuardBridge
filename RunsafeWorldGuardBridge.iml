@@ -9,6 +9,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="craftbukkit-1.2.5-R1.0" level="project" />
     <orderEntry type="library" name="framework" level="project" />
+    <orderEntry type="library" name="WorldGuard" level="project" />
+    <orderEntry type="library" name="WorldEdit" level="project" />
   </component>
 </module>
 
