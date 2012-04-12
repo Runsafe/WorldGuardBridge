@@ -35,7 +35,7 @@ public class WorldGuardInterface
     public boolean serverHasWorldGuard()
     {
         if (this.worldGuard == null)
-            this.getWorldGuard(server);
+            this.worldGuard = this.getWorldGuard(this.server);
 
         if (this.worldGuard != null)
             return true;
