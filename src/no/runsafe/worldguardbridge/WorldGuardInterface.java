@@ -26,7 +26,7 @@ public class WorldGuardInterface
     {
         Plugin plugin = server.getPluginManager().getPlugin("WorldGuard");
 
-        if (plugin != null || !(plugin instanceof WorldGuardPlugin))
+        if (plugin == null || !(plugin instanceof WorldGuardPlugin))
             return null;
 
         return (WorldGuardPlugin) plugin;
