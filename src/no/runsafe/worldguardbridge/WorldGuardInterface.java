@@ -5,7 +5,7 @@ import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import no.runsafe.framework.player.RunsafePlayer;
+import no.runsafe.framework.server.player.RunsafePlayer;
 import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
 
