@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="framework">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../Runsafe-Minecraft-Plugin-Framework/out/framework.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../out/framework.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
