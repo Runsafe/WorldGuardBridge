@@ -1,13 +1,18 @@
 package no.runsafe.worldguardbridge;
 
+import com.sk89q.worldedit.BlockVector;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import no.runsafe.framework.server.RunsafeLocation;
+import no.runsafe.framework.server.RunsafeWorld;
 import no.runsafe.framework.server.player.RunsafePlayer;
 import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
+
+import java.util.*;
 
 public class WorldGuardInterface
 {
@@ -43,7 +48,7 @@ public class WorldGuardInterface
 	public boolean isInPvPZone(RunsafePlayer player)
 	{
 		RegionManager regionManager = worldGuard.getRegionManager(player.getWorld().getRaw());
-		ApplicableRegionSet set = regionManager.getApplicableRegions(player.getRaw().getLocation());
+		ApplicableRegionSet set = regionManager.getApplicableRegions(player.getLocation().getRaw());
 
 		return set.allows(DefaultFlag.PVP);
 	}
@@ -51,7 +56,7 @@ public class WorldGuardInterface
 	public String getCurrentRegion(RunsafePlayer player)
 	{
 		RegionManager regionManager = worldGuard.getRegionManager(player.getWorld().getRaw());
-		ApplicableRegionSet set = regionManager.getApplicableRegions(player.getRaw().getLocation());
+		ApplicableRegionSet set = regionManager.getApplicableRegions(player.getLocation().getRaw());
 		if (set.size() == 0)
 			return null;
 		StringBuilder sb = new StringBuilder();
@@ -62,5 +67,49 @@ public class WorldGuardInterface
 			sb.append(r.getId());
 		}
 		return sb.toString();
+	}
+
+	public List<String> getApplicableRegions(RunsafePlayer player)
+	{
+		RegionManager regionManager = worldGuard.getRegionManager(player.getWorld().getRaw());
+		ApplicableRegionSet set = regionManager.getApplicableRegions(player.getLocation().getRaw());
+		if (set.size() == 0)
+			return null;
+		ArrayList<String> regions = new ArrayList<String>();
+		for (ProtectedRegion r : set)
+		{
+			regions.add(r.getId());
+		}
+		return regions;
+	}
+
+	public Map<String, Set<String>> getAllRegionsWithOwnersInWorld(RunsafeWorld world)
+	{
+		HashMap<String, Set<String>> result = new HashMap<String, Set<String>>();
+		RegionManager regionManager = worldGuard.getRegionManager(world.getRaw());
+		Map<String, ProtectedRegion> regions = regionManager.getRegions();
+		for(String region : regions.keySet())
+			result.put(region, regions.get(region).getOwners().getPlayers());
+		return result;
+	}
+
+	public RunsafeLocation getRegionLocation(RunsafeWorld world, String name)
+	{
+		if(!serverHasWorldGuard())
+			return null;
+
+		ProtectedRegion region = worldGuard.getRegionManager(world.getRaw()).getRegion(name);
+		if(region == null)
+			return null;
+		BlockVector point = region.getMaximumPoint();
+		return new RunsafeLocation(world, point.getX(), point.getY(), point.getZ());
+	}
+
+	public Set<String> getOwners(RunsafeWorld world, String name)
+	{
+		if(!serverHasWorldGuard())
+			return null;
+
+		return worldGuard.getRegionManager(world.getRaw()).getRegion(name).getOwners().getPlayers();
 	}
 }
