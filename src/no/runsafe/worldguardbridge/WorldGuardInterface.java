@@ -112,4 +112,15 @@ public class WorldGuardInterface
 
 		return worldGuard.getRegionManager(world.getRaw()).getRegion(name).getOwners().getPlayers();
 	}
+
+	public List<String> getOwnedRegions(RunsafePlayer player, RunsafeWorld world)
+	{
+		RegionManager regionManager = worldGuard.getRegionManager(world.getRaw());
+		ArrayList<String> regions = new ArrayList<String>();
+		Map<String, ProtectedRegion> regionSet = regionManager.getRegions();
+		for(String region : regionSet.keySet())
+			if(regionSet.get(region).getOwners().contains(player.getName()))
+				regions.add(region);
+		return regions;
+	}
 }
