@@ -50,6 +50,9 @@ public class WorldGuardInterface
 		RegionManager regionManager = worldGuard.getRegionManager(player.getWorld().getRaw());
 		ApplicableRegionSet set = regionManager.getApplicableRegions(player.getLocation().getRaw());
 
+        if (set.size() == 0)
+            return false;
+
 		return set.allows(DefaultFlag.PVP);
 	}
 
@@ -68,6 +71,21 @@ public class WorldGuardInterface
 		}
 		return sb.toString();
 	}
+
+    public List<String> getRegionsAtLocation(RunsafeLocation location)
+    {
+        RegionManager regionManager = worldGuard.getRegionManager(location.getWorld().getRaw());
+        ApplicableRegionSet set = regionManager.getApplicableRegions(location.getRaw());
+
+        if (set.size() == 0)
+            return null;
+
+        ArrayList<String> regions = new ArrayList<String>();
+        for (ProtectedRegion region : set)
+            regions.add(region.getId());
+
+        return regions;
+    }
 
 	public List<String> getApplicableRegions(RunsafePlayer player)
 	{
@@ -112,6 +130,14 @@ public class WorldGuardInterface
 
 		return worldGuard.getRegionManager(world.getRaw()).getRegion(name).getOwners().getPlayers();
 	}
+
+    public Set<String> getMembers(RunsafeWorld world, String name)
+    {
+        if (!serverHasWorldGuard())
+            return null;
+
+        return worldGuard.getRegionManager(world.getRaw()).getRegion(name).getMembers().getPlayers();
+    }
 
 	public List<String> getOwnedRegions(RunsafePlayer player, RunsafeWorld world)
 	{
