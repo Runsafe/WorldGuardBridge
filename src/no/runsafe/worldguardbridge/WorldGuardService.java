@@ -25,17 +25,17 @@ public class WorldGuardService implements IMessageBusService
 
 	public Response processMessage(Message message)
 	{
-		if (this.worldGuardInterface.serverHasWorldGuard())
+		if(this.worldGuardInterface.serverHasWorldGuard())
 		{
 			this.hasWarned = false;
 			WorldGuardQuestions response = WorldGuardQuestions.valueOf(message.getQuestion());
 			Response returnResponse = new Response();
 			returnResponse.setSourceService(this.getServiceName());
 
-			switch (response)
+			switch(response)
 			{
 				case PLAYER_IN_PVP_ZONE:
-					if (this.worldGuardInterface.isInPvPZone(message.getPlayer()))
+					if(this.worldGuardInterface.isInPvPZone(message.getPlayer()))
 						returnResponse.setStatus(MessageBusStatus.OK);
 					else
 						returnResponse.setStatus(MessageBusStatus.NOT_OK);
@@ -59,7 +59,7 @@ public class WorldGuardService implements IMessageBusService
 			return returnResponse;
 		} else
 		{
-			if (!this.hasWarned)
+			if(!this.hasWarned)
 			{
 				this.output.outputToConsole(Constants.WORLD_GUARD_MISSING);
 				this.hasWarned = true;
