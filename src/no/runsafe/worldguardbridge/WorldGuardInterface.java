@@ -47,6 +47,9 @@ public class WorldGuardInterface
 
 	public boolean isInPvPZone(RunsafePlayer player)
 	{
+        if (!serverHasWorldGuard())
+            return false;
+        
 		RegionManager regionManager = worldGuard.getRegionManager(player.getWorld().getRaw());
 		ApplicableRegionSet set = regionManager.getApplicableRegions(player.getLocation().getRaw());
 
