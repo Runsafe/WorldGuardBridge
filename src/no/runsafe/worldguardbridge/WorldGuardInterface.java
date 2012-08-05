@@ -6,6 +6,7 @@ import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import no.runsafe.framework.output.IOutput;
 import no.runsafe.framework.server.RunsafeLocation;
 import no.runsafe.framework.server.RunsafeWorld;
 import no.runsafe.framework.server.player.RunsafePlayer;
@@ -19,9 +20,10 @@ public class WorldGuardInterface
 	private Server server;
 	private WorldGuardPlugin worldGuard;
 
-	public WorldGuardInterface(Server server)
+	public WorldGuardInterface(Server server, IOutput console)
 	{
 		this.server = server;
+		this.console = console;
 	}
 
 	private WorldGuardPlugin getWorldGuard(Server server)
@@ -47,10 +49,23 @@ public class WorldGuardInterface
 
 	public boolean isInPvPZone(RunsafePlayer player)
 	{
+		if(player == null)
+			console.fine("[isInPvPZone] player is null!");
+
 		if(!serverHasWorldGuard())
 			return false;
 
+		if(player.getWorld() == null)
+			console.fine("[isInPvPZone] player world is null!");
+		if(player.getWorld().getRaw() == null)
+			console.fine("[isInPvPZone] player raw world is null!");
+		if(player.getLocation() == null)
+			console.fine("[isInPvPZone] player location is null!");
+		if(player.getLocation().getRaw() == null)
+			console.fine("[isInPvPZone] player raw location is null!");
 		RegionManager regionManager = worldGuard.getRegionManager(player.getWorld().getRaw());
+		if(regionManager == null)
+			console.fine("[isInPvPZone] regionManager is null!");
 		ApplicableRegionSet set = regionManager.getApplicableRegions(player.getLocation().getRaw());
 
 		if(set.size() == 0)
@@ -152,4 +167,6 @@ public class WorldGuardInterface
 				regions.add(region);
 		return regions;
 	}
+
+	private IOutput console;
 }
