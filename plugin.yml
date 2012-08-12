@@ -1,5 +1,5 @@
 name: RunsafeWorldGuardBridge
-main: no.runsafe.worldguardbridge.WorldGuardBridgePlugin
-version: 1.0
+main: no.runsafe.worldguardbridge.Plugin
+version: 1.1
 author: Kruithne
 description: Bridge between Runsafe Framework and WorldGuard
