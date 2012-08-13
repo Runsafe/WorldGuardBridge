@@ -8,6 +8,7 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import no.runsafe.framework.event.IPluginEnabled;
 import no.runsafe.framework.output.IOutput;
+import no.runsafe.framework.plugin.PluginResolver;
 import no.runsafe.framework.server.RunsafeLocation;
 import no.runsafe.framework.server.RunsafeWorld;
 import no.runsafe.framework.server.player.RunsafePlayer;
@@ -19,12 +20,10 @@ import java.util.*;
 
 public class WorldGuardInterface implements IPluginEnabled
 {
-	private Server server;
-	private WorldGuardPlugin worldGuard;
 
-	public WorldGuardInterface(Server server, IOutput console)
+	public WorldGuardInterface(PluginResolver pluginResolver, IOutput console)
 	{
-		this.server = server;
+		this.resolver = pluginResolver;
 		this.console = console;
 	}
 
@@ -38,7 +37,7 @@ public class WorldGuardInterface implements IPluginEnabled
 	public boolean serverHasWorldGuard()
 	{
 		if (this.worldGuard == null)
-			this.worldGuard = this.getWorldGuard(this.server);
+			this.worldGuard = getWorldGuard();
 
 		if (this.worldGuard != null)
 			return true;
@@ -193,21 +192,18 @@ public class WorldGuardInterface implements IPluginEnabled
 	public boolean deleteRegion(RunsafeWorld world, String name)
 	{
 		RegionManager regionManager = worldGuard.getRegionManager(world.getRaw());
-		if(regionManager.getRegion(name) == null)
+		if (regionManager.getRegion(name) == null)
 			return false;
 		regionManager.removeRegion(name);
 		return true;
 	}
 
-	private WorldGuardPlugin getWorldGuard(Server server)
+	private WorldGuardPlugin getWorldGuard()
 	{
-		Plugin plugin = server.getPluginManager().getPlugin("WorldGuard");
-
-		if (plugin == null || !(plugin instanceof WorldGuardPlugin))
-			return null;
-
-		return (WorldGuardPlugin) plugin;
+		return resolver.getPlugin("WorldGuard");
 	}
 
+	private WorldGuardPlugin worldGuard;
 	private IOutput console;
+	private PluginResolver resolver;
 }
