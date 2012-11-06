@@ -39,37 +39,16 @@ public class WorldGuardInterface implements IPluginEnabled
 		if (this.worldGuard == null)
 			this.worldGuard = getWorldGuard();
 
-		if (this.worldGuard != null)
-			return true;
-
-		return false;
+		return this.worldGuard != null;
 	}
 
 	public boolean isInPvPZone(RunsafePlayer player)
 	{
-		if (player == null)
-			console.fine("[isInPvPZone] player is null!");
-
-		if (!serverHasWorldGuard())
+		if (player == null || !serverHasWorldGuard())
 			return false;
-
-		if (player.getWorld() == null)
-			console.fine("[isInPvPZone] player world is null!");
-		if (player.getWorld().getRaw() == null)
-			console.fine("[isInPvPZone] player raw world is null!");
-		if (player.getLocation() == null)
-			console.fine("[isInPvPZone] player location is null!");
-		if (player.getLocation().getRaw() == null)
-			console.fine("[isInPvPZone] player raw location is null!");
 		RegionManager regionManager = worldGuard.getRegionManager(player.getWorld().getRaw());
-		if (regionManager == null)
-			console.fine("[isInPvPZone] regionManager is null!");
 		ApplicableRegionSet set = regionManager.getApplicableRegions(player.getLocation().getRaw());
-
-		if (set.size() == 0)
-			return false;
-
-		return set.allows(DefaultFlag.PVP);
+		return set.size() != 0 && set.allows(DefaultFlag.PVP);
 	}
 
 	public String getCurrentRegion(RunsafePlayer player)
@@ -204,6 +183,6 @@ public class WorldGuardInterface implements IPluginEnabled
 	}
 
 	private WorldGuardPlugin worldGuard;
-	private IOutput console;
-	private PluginResolver resolver;
+	private final IOutput console;
+	private final PluginResolver resolver;
 }

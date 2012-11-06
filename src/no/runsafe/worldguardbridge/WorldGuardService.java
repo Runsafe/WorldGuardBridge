@@ -8,8 +8,8 @@ import no.runsafe.framework.output.IOutput;
 
 public class WorldGuardService implements IMessageBusService
 {
-	private IOutput output;
-	private WorldGuardInterface worldGuardInterface;
+	private final IOutput output;
+	private final WorldGuardInterface worldGuardInterface;
 	private boolean hasWarned = false;
 
 	public WorldGuardService(IOutput output, WorldGuardInterface worldGuardInterface)
