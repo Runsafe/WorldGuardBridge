@@ -2,6 +2,7 @@ package no.runsafe.worldguardbridge;
 
 import com.sk89q.worldedit.BlockVector;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
@@ -12,8 +13,6 @@ import no.runsafe.framework.plugin.PluginResolver;
 import no.runsafe.framework.server.RunsafeLocation;
 import no.runsafe.framework.server.RunsafeWorld;
 import no.runsafe.framework.server.player.RunsafePlayer;
-import org.bukkit.Server;
-import org.bukkit.plugin.Plugin;
 
 import java.awt.geom.Rectangle2D;
 import java.util.*;
@@ -175,6 +174,34 @@ public class WorldGuardInterface implements IPluginEnabled
 			return false;
 		regionManager.removeRegion(name);
 		return true;
+	}
+
+	public boolean addMemberToRegion(RunsafeWorld world, String name, RunsafePlayer player)
+	{
+		if (!serverHasWorldGuard())
+			return false;
+
+ 			DefaultDomain members = worldGuard.getRegionManager(world.getRaw()).getRegion(name).getMembers();
+		if (!members.contains(player.getName()))
+		{
+			members.addPlayer(player.getName());
+			return true;
+		}
+		return false;
+	}
+
+	public boolean removeMemberFromRegion(RunsafeWorld world, String name, RunsafePlayer player)
+	{
+		if (!serverHasWorldGuard())
+			return false;
+
+		DefaultDomain members = worldGuard.getRegionManager(world.getRaw()).getRegion(name).getMembers();
+		if (members.contains(player.getName()))
+		{
+			members.removePlayer(player.getName());
+			return true;
+		}
+		return false;
 	}
 
 	private WorldGuardPlugin getWorldGuard()
