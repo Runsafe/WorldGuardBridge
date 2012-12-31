@@ -135,6 +135,8 @@ public class WorldGuardInterface implements IPluginEnabled
 
 	public List<String> getOwnedRegions(RunsafePlayer player, RunsafeWorld world)
 	{
+		if(world == null || player == null)
+			return null;
 		RegionManager regionManager = worldGuard.getRegionManager(world.getRaw());
 		ArrayList<String> regions = new ArrayList<String>();
 		Map<String, ProtectedRegion> regionSet = regionManager.getRegions();
