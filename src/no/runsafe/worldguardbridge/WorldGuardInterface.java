@@ -135,7 +135,7 @@ public class WorldGuardInterface implements IPluginEnabled
 
 	public List<String> getOwnedRegions(RunsafePlayer player, RunsafeWorld world)
 	{
-		if(world == null || player == null)
+		if (world == null || player == null)
 			return null;
 		RegionManager regionManager = worldGuard.getRegionManager(world.getRaw());
 		ArrayList<String> regions = new ArrayList<String>();
@@ -183,7 +183,7 @@ public class WorldGuardInterface implements IPluginEnabled
 		if (!serverHasWorldGuard())
 			return false;
 
- 			DefaultDomain members = worldGuard.getRegionManager(world.getRaw()).getRegion(name).getMembers();
+		DefaultDomain members = worldGuard.getRegionManager(world.getRaw()).getRegion(name).getMembers();
 		if (!members.contains(player.getName()))
 		{
 			members.addPlayer(player.getName());
@@ -204,6 +204,18 @@ public class WorldGuardInterface implements IPluginEnabled
 			return true;
 		}
 		return false;
+	}
+
+	public Rectangle2D getRectangle(RunsafeWorld world, String name)
+	{
+		if (!serverHasWorldGuard())
+			return null;
+		ProtectedRegion region = worldGuard.getRegionManager(world.getRaw()).getRegion(name);
+		Rectangle2D.Double area = new Rectangle2D.Double();
+		BlockVector min = region.getMinimumPoint();
+		BlockVector max = region.getMaximumPoint();
+		area.setRect(min.getX(), min.getZ(), max.getX() - min.getX(), max.getZ() - min.getZ());
+		return area;
 	}
 
 	private WorldGuardPlugin getWorldGuard()
