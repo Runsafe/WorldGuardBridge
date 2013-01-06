@@ -1,6 +1,6 @@
 package no.runsafe.worldguardbridge;
 
-public class Constants
+class Constants
 {
 	public static final String WORLD_GUARD_MISSING = "WorldGuard was not found, please enable it or remove this plugin.";
 }
