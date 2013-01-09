@@ -211,6 +211,8 @@ public class WorldGuardInterface implements IPluginEnabled
 		if (!serverHasWorldGuard())
 			return null;
 		ProtectedRegion region = worldGuard.getRegionManager(world.getRaw()).getRegion(name);
+		if (region == null)
+			return null;
 		Rectangle2D.Double area = new Rectangle2D.Double();
 		BlockVector min = region.getMinimumPoint();
 		BlockVector max = region.getMaximumPoint();
