@@ -1,5 +1,6 @@
 <project name="RunsafeWorldGuardBridge" basedir="." default="jar">
 
+    <property name="local-lib.dir" value="lib"/>
     <property name="src.dir" value="src"/>
     <property name="build.dir" value="build"/>
     <property name="classes.dir" value="${build.dir}/classes"/>
@@ -11,6 +12,7 @@
     <path id="classpath">
         <fileset dir="${runsafe.dir}" includes="framework.jar"/>
         <fileset dir="${lib.dir}" includes="*.jar"/>
+        <fileset dir="${local-lib.dir}" includes="*.jar"/>
     </path>
 
     <target name="clean">
