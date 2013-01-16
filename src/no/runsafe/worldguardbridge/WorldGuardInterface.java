@@ -9,6 +9,7 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import no.runsafe.framework.event.IPluginEnabled;
 import no.runsafe.framework.hook.IPlayerBuildPermission;
+import no.runsafe.framework.hook.IPlayerPvPFlag;
 import no.runsafe.framework.output.IOutput;
 import no.runsafe.framework.plugin.PluginResolver;
 import no.runsafe.framework.server.RunsafeLocation;
@@ -18,7 +19,7 @@ import no.runsafe.framework.server.player.RunsafePlayer;
 import java.awt.geom.Rectangle2D;
 import java.util.*;
 
-public class WorldGuardInterface implements IPluginEnabled, IPlayerBuildPermission
+public class WorldGuardInterface implements IPluginEnabled, IPlayerBuildPermission, IPlayerPvPFlag
 {
 
 	public WorldGuardInterface(PluginResolver pluginResolver, IOutput console)
@@ -41,6 +42,19 @@ public class WorldGuardInterface implements IPluginEnabled, IPlayerBuildPermissi
 			return false;
 
 		return !worldGuard.getGlobalRegionManager().canBuild(player.getRawPlayer(), location.getRaw());
+	}
+
+	@Override
+	public boolean isFlaggedForPvP(RunsafePlayer player)
+	{
+		if (!serverHasWorldGuard())
+			return true;
+
+		RegionManager manager = worldGuard.getGlobalRegionManager().get(player.getWorld().getRaw());
+		RunsafeLocation playerLocation = player.getLocation();
+		BlockVector location = new BlockVector(playerLocation.getX(), playerLocation.getY(), playerLocation.getZ());
+		ApplicableRegionSet applicable = manager.getApplicableRegions(location);
+		return applicable.allows(DefaultFlag.PVP, worldGuard.wrapPlayer(player.getRawPlayer()));
 	}
 
 	public boolean serverHasWorldGuard()
