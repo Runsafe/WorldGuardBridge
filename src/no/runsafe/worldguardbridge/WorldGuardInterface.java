@@ -8,6 +8,7 @@ import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import no.runsafe.framework.event.IPluginEnabled;
+import no.runsafe.framework.hook.IPlayerBuildPermission;
 import no.runsafe.framework.output.IOutput;
 import no.runsafe.framework.plugin.PluginResolver;
 import no.runsafe.framework.server.RunsafeLocation;
@@ -17,7 +18,7 @@ import no.runsafe.framework.server.player.RunsafePlayer;
 import java.awt.geom.Rectangle2D;
 import java.util.*;
 
-public class WorldGuardInterface implements IPluginEnabled
+public class WorldGuardInterface implements IPluginEnabled, IPlayerBuildPermission
 {
 
 	public WorldGuardInterface(PluginResolver pluginResolver, IOutput console)
@@ -31,6 +32,15 @@ public class WorldGuardInterface implements IPluginEnabled
 	{
 		if (!serverHasWorldGuard())
 			console.write("Could not find WorldGuard on this server!");
+	}
+
+	@Override
+	public boolean blockPlayerBuilding(RunsafePlayer player, RunsafeLocation location)
+	{
+		if (!serverHasWorldGuard())
+			return false;
+
+		return !worldGuard.getGlobalRegionManager().canBuild(player.getRawPlayer(), location.getRaw());
 	}
 
 	public boolean serverHasWorldGuard()
