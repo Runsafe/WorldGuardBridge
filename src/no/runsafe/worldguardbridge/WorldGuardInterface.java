@@ -1,25 +1,26 @@
 package no.runsafe.worldguardbridge;
 
 import com.sk89q.worldedit.BlockVector;
+import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.GlobalRegionManager;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import no.runsafe.framework.event.IPluginEnabled;
-import no.runsafe.framework.hook.IPlayerBuildPermission;
-import no.runsafe.framework.hook.IPlayerPvPFlag;
 import no.runsafe.framework.output.IOutput;
 import no.runsafe.framework.server.RunsafeLocation;
 import no.runsafe.framework.server.RunsafeServer;
 import no.runsafe.framework.server.RunsafeWorld;
 import no.runsafe.framework.server.player.RunsafePlayer;
+import org.bukkit.entity.Player;
 
 import java.awt.geom.Rectangle2D;
 import java.util.*;
 
-public class WorldGuardInterface implements IPluginEnabled, IPlayerBuildPermission, IPlayerPvPFlag
+public class WorldGuardInterface implements IPluginEnabled
 {
 
 	public WorldGuardInterface(IOutput console)
@@ -32,28 +33,6 @@ public class WorldGuardInterface implements IPluginEnabled, IPlayerBuildPermissi
 	{
 		if (!serverHasWorldGuard())
 			console.write("Could not find WorldGuard on this server!");
-	}
-
-	@Override
-	public boolean blockPlayerBuilding(RunsafePlayer player, RunsafeLocation location)
-	{
-		if (!serverHasWorldGuard())
-			return false;
-
-		return !worldGuard.getGlobalRegionManager().canBuild(player.getRawPlayer(), location.getRaw());
-	}
-
-	@Override
-	public boolean isFlaggedForPvP(RunsafePlayer player)
-	{
-		if (!serverHasWorldGuard())
-			return true;
-
-		RegionManager manager = worldGuard.getGlobalRegionManager().get(player.getWorld().getRaw());
-		RunsafeLocation playerLocation = player.getLocation();
-		BlockVector location = new BlockVector(playerLocation.getX(), playerLocation.getY(), playerLocation.getZ());
-		ApplicableRegionSet applicable = manager.getApplicableRegions(location);
-		return applicable.allows(DefaultFlag.PVP, worldGuard.wrapPlayer(player.getRawPlayer()));
 	}
 
 	public boolean serverHasWorldGuard()
@@ -241,6 +220,16 @@ public class WorldGuardInterface implements IPluginEnabled, IPlayerBuildPermissi
 		BlockVector max = region.getMaximumPoint();
 		area.setRect(min.getX(), min.getZ(), max.getX() - min.getX(), max.getZ() - min.getZ());
 		return area;
+	}
+
+	GlobalRegionManager getGlobalRegionManager()
+	{
+		return worldGuard.getGlobalRegionManager();
+	}
+
+	LocalPlayer wrapPlayer(Player rawPlayer)
+	{
+		return worldGuard.wrapPlayer(rawPlayer);
 	}
 
 	private WorldGuardPlugin worldGuard;
