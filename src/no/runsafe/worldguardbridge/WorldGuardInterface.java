@@ -11,8 +11,8 @@ import no.runsafe.framework.event.IPluginEnabled;
 import no.runsafe.framework.hook.IPlayerBuildPermission;
 import no.runsafe.framework.hook.IPlayerPvPFlag;
 import no.runsafe.framework.output.IOutput;
-import no.runsafe.framework.plugin.PluginResolver;
 import no.runsafe.framework.server.RunsafeLocation;
+import no.runsafe.framework.server.RunsafeServer;
 import no.runsafe.framework.server.RunsafeWorld;
 import no.runsafe.framework.server.player.RunsafePlayer;
 
@@ -22,9 +22,8 @@ import java.util.*;
 public class WorldGuardInterface implements IPluginEnabled, IPlayerBuildPermission, IPlayerPvPFlag
 {
 
-	public WorldGuardInterface(PluginResolver pluginResolver, IOutput console)
+	public WorldGuardInterface(IOutput console)
 	{
-		this.resolver = pluginResolver;
 		this.console = console;
 	}
 
@@ -60,7 +59,7 @@ public class WorldGuardInterface implements IPluginEnabled, IPlayerBuildPermissi
 	public boolean serverHasWorldGuard()
 	{
 		if (this.worldGuard == null)
-			this.worldGuard = getWorldGuard();
+			this.worldGuard = RunsafeServer.Instance.getPlugin("WorldGuard");
 
 		return this.worldGuard != null;
 	}
@@ -244,12 +243,6 @@ public class WorldGuardInterface implements IPluginEnabled, IPlayerBuildPermissi
 		return area;
 	}
 
-	private WorldGuardPlugin getWorldGuard()
-	{
-		return resolver.getPlugin("WorldGuard");
-	}
-
 	private WorldGuardPlugin worldGuard;
 	private final IOutput console;
-	private final PluginResolver resolver;
 }

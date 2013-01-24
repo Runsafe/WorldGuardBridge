@@ -8,6 +8,5 @@ public class Plugin extends RunsafePlugin
 	protected void PluginSetup()
 	{
 		this.addComponent(WorldGuardInterface.class);
-		this.addComponent(WorldGuardService.class);
 	}
 }
