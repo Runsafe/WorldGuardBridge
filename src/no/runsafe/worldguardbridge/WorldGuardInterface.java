@@ -156,6 +156,8 @@ public class WorldGuardInterface implements IPluginEnabled
 
 	public Map<String, Rectangle2D> getRegionRectanglesInWorld(RunsafeWorld world)
 	{
+		if (world == null || worldGuard == null)
+			return null;
 		RegionManager regionManager = worldGuard.getRegionManager(world.getRaw());
 		Map<String, ProtectedRegion> regionSet = regionManager.getRegions();
 		HashMap<String, Rectangle2D> result = new HashMap<String, Rectangle2D>();
