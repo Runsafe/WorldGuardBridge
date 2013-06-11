@@ -4,10 +4,10 @@ import com.sk89q.worldedit.BlockVector;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
-import no.runsafe.framework.hook.IPlayerBuildPermission;
-import no.runsafe.framework.hook.IPlayerPvPFlag;
-import no.runsafe.framework.server.RunsafeLocation;
-import no.runsafe.framework.server.player.RunsafePlayer;
+import no.runsafe.framework.api.hook.IPlayerBuildPermission;
+import no.runsafe.framework.api.hook.IPlayerPvPFlag;
+import no.runsafe.framework.minecraft.RunsafeLocation;
+import no.runsafe.framework.minecraft.player.RunsafePlayer;
 
 public class WorldGuardHooks implements IPlayerBuildPermission, IPlayerPvPFlag
 {
