@@ -1,6 +1,7 @@
 package no.runsafe.worldguardbridge;
 
 import no.runsafe.framework.RunsafePlugin;
+import no.runsafe.worldguardbridge.event.RegionBorderPatrol;
 
 public class Plugin extends RunsafePlugin
 {
@@ -9,5 +10,6 @@ public class Plugin extends RunsafePlugin
 	{
 		this.addComponent(WorldGuardInterface.class);
 		this.addComponent(WorldGuardHooks.class);
+		this.addComponent(RegionBorderPatrol.class);
 	}
 }
