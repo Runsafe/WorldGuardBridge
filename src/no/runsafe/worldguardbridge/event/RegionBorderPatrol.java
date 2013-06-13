@@ -63,32 +63,34 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 
 	private void CheckIfEnteringRegion(RunsafePlayer player, RunsafeLocation from, RunsafeLocation to)
 	{
-		if (!regions.containsKey(player.getWorld().getName()))
+		if (!regions.containsKey(to.getWorld().getName()))
 			return;
-		Map<String, ProtectedRegion> worldRegions = regions.get(player.getWorld().getName());
+		Map<String, ProtectedRegion> worldRegions = regions.get(to.getWorld().getName());
 		for (String region : worldRegions.keySet())
 		{
 			ProtectedRegion area = worldRegions.get(region);
-			if (isInside(area, to) && !isInside(area, from))
-				CustomEvents.Enter(player, region);
+			if (isInside(area, to.getWorld(), to) && !isInside(area, to.getWorld(), from))
+				CustomEvents.Enter(player, to.getWorld(), region);
 		}
 	}
 
 	private void CheckIfLeavingRegion(RunsafePlayer player, RunsafeLocation from, RunsafeLocation to)
 	{
-		if (!regions.containsKey(player.getWorld().getName()))
+		if (!regions.containsKey(from.getWorld().getName()))
 			return;
-		Map<String, ProtectedRegion> worldRegions = regions.get(player.getWorld().getName());
+		Map<String, ProtectedRegion> worldRegions = regions.get(from.getWorld().getName());
 		for (String region : worldRegions.keySet())
 		{
 			ProtectedRegion area = worldRegions.get(region);
-			if (!isInside(area, to) && isInside(area, from))
-				CustomEvents.Leave(player, region);
+			if (!isInside(area, from.getWorld(), to) && isInside(area, from.getWorld(), from))
+				CustomEvents.Leave(player, from.getWorld(), region);
 		}
 	}
 
-	private boolean isInside(ProtectedRegion area, RunsafeLocation location)
+	private boolean isInside(ProtectedRegion area, RunsafeWorld world, RunsafeLocation location)
 	{
+		if (!world.equals(location))
+			return false;
 		return area.contains(location.getBlockX(), location.getBlockY(), location.getBlockZ());
 	}
 
