@@ -62,9 +62,9 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 				regionAmount += 1;
 				worldRegions.putIfAbsent(region, regions.get(region));
 			}
-			output.writeColoured("&aLoaded &2%d&a regions in world &1%s&a.&r", worldRegions.size(), world.getName());
+			output.writeColoured("&2Loaded &a%d&2 regions in world &a%s&2.&r", worldRegions.size(), world.getName());
 		}
-		output.write(String.format("&aLoaded &2%d&a regions across &1%d&a worlds.&r", regionAmount, regions.size()));
+		output.write(String.format("&2Loaded &a%d&2 regions across &a%d&2 worlds.&r", regionAmount, regions.size()));
 	}
 
 	private boolean serverHasWorldGuard()
