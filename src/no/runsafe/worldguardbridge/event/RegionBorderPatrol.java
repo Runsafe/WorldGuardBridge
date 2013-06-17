@@ -4,6 +4,7 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import no.runsafe.framework.api.IConfiguration;
+import no.runsafe.framework.api.IOutput;
 import no.runsafe.framework.api.event.IAsyncEvent;
 import no.runsafe.framework.api.event.player.IPlayerMove;
 import no.runsafe.framework.api.event.player.IPlayerTeleport;
@@ -18,6 +19,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurationChanged, IPlayerTeleport
 {
+	public RegionBorderPatrol(IOutput output)
+	{
+		this.output = output;
+	}
+
 	@Override
 	public boolean OnPlayerTeleport(RunsafePlayer player, RunsafeLocation from, RunsafeLocation to)
 	{
@@ -38,6 +44,7 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 	@Override
 	public void OnConfigurationChanged(IConfiguration iConfiguration)
 	{
+		int regionAmount = 0;
 		regions.clear();
 		if (!serverHasWorldGuard())
 			return;
@@ -45,12 +52,19 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 		{
 			if (!regions.containsKey(world.getName()))
 				regions.putIfAbsent(world.getName(), new ConcurrentHashMap<String, ProtectedRegion>());
+
 			ConcurrentHashMap<String, ProtectedRegion> worldRegions = regions.get(world.getName());
 			RegionManager manager = worldGuard.getRegionManager(world.getRaw());
 			Map<String, ProtectedRegion> regions = manager.getRegions();
+
 			for (String region : regions.keySet())
+			{
+				regionAmount += 1;
 				worldRegions.putIfAbsent(region, regions.get(region));
+			}
 		}
+
+		this.output.write(String.format("Loaded %s regions in %s worlds.", regionAmount, regions.size()));
 	}
 
 	private boolean serverHasWorldGuard()
@@ -97,4 +111,5 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 	private WorldGuardPlugin worldGuard;
 	private final ConcurrentHashMap<String, ConcurrentHashMap<String, ProtectedRegion>> regions =
 		new ConcurrentHashMap<String, ConcurrentHashMap<String, ProtectedRegion>>();
+	private IOutput output;
 }
