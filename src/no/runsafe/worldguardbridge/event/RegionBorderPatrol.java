@@ -86,7 +86,7 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 			if (isInside(area, to.getWorld(), to) && !isInside(area, to.getWorld(), from))
 			{
 				output.fine("Player is entering the region %s, sending notification!", region);
-				CustomEvents.Enter(player, to.getWorld(), region);
+				new RegionEnterEvent(player, to.getWorld(), region).Fire();
 			}
 		}
 	}
@@ -102,16 +102,15 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 			if (!isInside(area, from.getWorld(), to) && isInside(area, from.getWorld(), from))
 			{
 				output.fine("Player is leaving the region %s, sending notification!", region);
-				CustomEvents.Leave(player, from.getWorld(), region);
+				new RegionLeaveEvent(player, from.getWorld(), region).Fire();
 			}
 		}
 	}
 
 	private boolean isInside(ProtectedRegion area, RunsafeWorld world, RunsafeLocation location)
 	{
-		if (!world.equals(location.getWorld()))
-			return false;
-		return area.contains(location.getBlockX(), location.getBlockY(), location.getBlockZ());
+		return world.equals(location.getWorld())
+			&& area.contains(location.getBlockX(), location.getBlockY(), location.getBlockZ());
 	}
 
 	private WorldGuardPlugin worldGuard;
