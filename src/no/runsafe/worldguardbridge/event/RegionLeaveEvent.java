@@ -11,7 +11,7 @@ public class RegionLeaveEvent extends RunsafeCustomEvent
 {
 	public RegionLeaveEvent(RunsafePlayer player, RunsafeWorld world, String region)
 	{
-		super(player, "region.leave", null);
+		super(player, "region.leave");
 		this.world = world;
 		this.region = region;
 	}

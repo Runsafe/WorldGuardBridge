@@ -11,7 +11,7 @@ public class RegionEnterEvent extends RunsafeCustomEvent
 {
 	public RegionEnterEvent(RunsafePlayer player, RunsafeWorld world, String region)
 	{
-		super(player, "region.enter", null);
+		super(player, "region.enter");
 		this.world = world;
 		this.region = region;
 	}
