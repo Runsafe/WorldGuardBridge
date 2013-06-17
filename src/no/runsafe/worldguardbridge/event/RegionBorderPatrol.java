@@ -42,7 +42,7 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 	}
 
 	@Override
-	public void OnConfigurationChanged(IConfiguration iConfiguration)
+	public void OnConfigurationChanged(IConfiguration configuration)
 	{
 		int regionAmount = 0;
 		regions.clear();
@@ -62,9 +62,9 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 				regionAmount += 1;
 				worldRegions.putIfAbsent(region, regions.get(region));
 			}
+			output.writeColoured("&aLoaded &2%d&a regions in world &1%s&a.&r", worldRegions.size(), world.getName());
 		}
-
-		this.output.write(String.format("Loaded %s regions in %s worlds.", regionAmount, regions.size()));
+		output.write(String.format("&aLoaded &2%d&a regions across &1%d&a worlds.&r", regionAmount, regions.size()));
 	}
 
 	private boolean serverHasWorldGuard()
@@ -84,7 +84,10 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 		{
 			ProtectedRegion area = worldRegions.get(region);
 			if (isInside(area, to.getWorld(), to) && !isInside(area, to.getWorld(), from))
+			{
+				output.fine("Player is entering the region %s, sending notification!", region);
 				CustomEvents.Enter(player, to.getWorld(), region);
+			}
 		}
 	}
 
@@ -97,13 +100,16 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 		{
 			ProtectedRegion area = worldRegions.get(region);
 			if (!isInside(area, from.getWorld(), to) && isInside(area, from.getWorld(), from))
+			{
+				output.fine("Player is leaving the region %s, sending notification!", region);
 				CustomEvents.Leave(player, from.getWorld(), region);
+			}
 		}
 	}
 
 	private boolean isInside(ProtectedRegion area, RunsafeWorld world, RunsafeLocation location)
 	{
-		if (!world.equals(location))
+		if (!world.equals(location.getWorld()))
 			return false;
 		return area.contains(location.getBlockX(), location.getBlockY(), location.getBlockZ());
 	}
