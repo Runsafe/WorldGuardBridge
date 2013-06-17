@@ -64,7 +64,7 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 			}
 			output.writeColoured("&2Loaded &a%d&2 regions in world &a%s&2.&r", worldRegions.size(), world.getName());
 		}
-		output.write(String.format("&2Loaded &a%d&2 regions across &a%d&2 worlds.&r", regionAmount, regions.size()));
+		output.writeColoured("&2Loaded &a%d&2 regions across &a%d&2 worlds.&r", regionAmount, regions.size());
 	}
 
 	private boolean serverHasWorldGuard()
