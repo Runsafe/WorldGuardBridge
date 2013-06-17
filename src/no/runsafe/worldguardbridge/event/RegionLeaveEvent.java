@@ -16,6 +16,16 @@ public class RegionLeaveEvent extends RunsafeCustomEvent
 		this.region = region;
 	}
 
+	public RunsafeWorld getWorld()
+	{
+		return world;
+	}
+
+	public String getRegion()
+	{
+		return region;
+	}
+
 	@Override
 	public Map<String, String> getData()
 	{
