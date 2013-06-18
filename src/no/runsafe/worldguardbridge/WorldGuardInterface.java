@@ -1,6 +1,7 @@
 package no.runsafe.worldguardbridge;
 
 import com.sk89q.worldedit.BlockVector;
+import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
 import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.domains.DefaultDomain;
@@ -192,11 +193,10 @@ public class WorldGuardInterface implements IPluginEnabled
 		if (regionManager.hasRegion(name))
 			return false;
 
-		ProtectedRegion region = new ProtectedCuboidRegion(
-			name,
-			new BlockVector(pos1.getX(), pos1.getY(), pos1.getZ()),
-			new BlockVector(pos2.getX(), pos2.getY(), pos2.getZ())
-		);
+		CuboidSelection selection = new CuboidSelection(world.getRaw(), pos1.getRaw(), pos2.getRaw());
+		BlockVector min = selection.getNativeMinimumPoint().toBlockVector();
+		BlockVector max = selection.getNativeMaximumPoint().toBlockVector();
+		ProtectedRegion region = new ProtectedCuboidRegion(name, min, max);
 		region.getOwners().addPlayer(owner.getName());
 		regionManager.addRegion(region);
 		return regionManager.hasRegion(name);
