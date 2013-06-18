@@ -8,6 +8,7 @@ import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.GlobalRegionManager;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import no.runsafe.framework.api.IOutput;
 import no.runsafe.framework.api.event.plugin.IPluginEnabled;
@@ -180,6 +181,25 @@ public class WorldGuardInterface implements IPluginEnabled
 			return false;
 		regionManager.removeRegion(name);
 		return true;
+	}
+
+	public boolean createRegion(RunsafePlayer owner, RunsafeWorld world, String name, RunsafeLocation pos1, RunsafeLocation pos2)
+	{
+		if (world == null || worldGuard == null)
+			return false;
+
+		RegionManager regionManager = worldGuard.getRegionManager(world.getRaw());
+		if (regionManager.hasRegion(name))
+			return false;
+
+		ProtectedRegion region = new ProtectedCuboidRegion(
+			name,
+			new BlockVector(pos1.getBlockX(), pos1.getBlockY(), pos1.getBlockZ()),
+			new BlockVector(pos2.getBlockX(), pos2.getBlockY(), pos2.getBlockZ())
+		);
+		region.getOwners().addPlayer(owner.getName());
+		regionManager.addRegion(region);
+		return regionManager.hasRegion(name);
 	}
 
 	public boolean addMemberToRegion(RunsafeWorld world, String name, RunsafePlayer player)
