@@ -226,8 +226,10 @@ public class WorldGuardInterface implements IPluginEnabled
 
 		RegionManager regionManager = worldGuard.getRegionManager(world.getRaw());
 		if (regionManager.hasRegion(name))
+		{
+			console.fine("Region manager does not know anything about the region %s in world %s!", name, world.getName());
 			return false;
-
+		}
 		CuboidSelection selection = new CuboidSelection(world.getRaw(), pos1.getRaw(), pos2.getRaw());
 		BlockVector min = selection.getNativeMinimumPoint().toBlockVector();
 		BlockVector max = selection.getNativeMaximumPoint().toBlockVector();
