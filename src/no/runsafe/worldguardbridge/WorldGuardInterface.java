@@ -7,6 +7,7 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.GlobalRegionManager;
+import com.sk89q.worldguard.protection.databases.ProtectionDatabaseException;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
@@ -181,6 +182,14 @@ public class WorldGuardInterface implements IPluginEnabled
 		if (regionManager.getRegion(name) == null)
 			return false;
 		regionManager.removeRegion(name);
+		try
+		{
+			regionManager.save();
+		}
+		catch (ProtectionDatabaseException e)
+		{
+			console.logException(e);
+		}
 		return true;
 	}
 
@@ -199,6 +208,14 @@ public class WorldGuardInterface implements IPluginEnabled
 		ProtectedRegion region = new ProtectedCuboidRegion(name, min, max);
 		region.getOwners().addPlayer(owner.getName());
 		regionManager.addRegion(region);
+		try
+		{
+			regionManager.save();
+		}
+		catch (ProtectionDatabaseException e)
+		{
+			console.logException(e);
+		}
 		return regionManager.hasRegion(name);
 	}
 
@@ -207,10 +224,19 @@ public class WorldGuardInterface implements IPluginEnabled
 		if (!serverHasWorldGuard())
 			return false;
 
-		DefaultDomain members = worldGuard.getRegionManager(world.getRaw()).getRegion(name).getMembers();
+		RegionManager regionManager = worldGuard.getRegionManager(world.getRaw());
+		DefaultDomain members = regionManager.getRegion(name).getMembers();
 		if (!members.contains(player.getName()))
 		{
 			members.addPlayer(player.getName());
+			try
+			{
+				regionManager.save();
+			}
+			catch (ProtectionDatabaseException e)
+			{
+				console.logException(e);
+			}
 			return true;
 		}
 		return false;
@@ -221,10 +247,19 @@ public class WorldGuardInterface implements IPluginEnabled
 		if (!serverHasWorldGuard())
 			return false;
 
-		DefaultDomain members = worldGuard.getRegionManager(world.getRaw()).getRegion(name).getMembers();
+		RegionManager regionManager = worldGuard.getRegionManager(world.getRaw());
+		DefaultDomain members = regionManager.getRegion(name).getMembers();
 		if (members.contains(player.getName()))
 		{
 			members.removePlayer(player.getName());
+			try
+			{
+				regionManager.save();
+			}
+			catch (ProtectionDatabaseException e)
+			{
+				console.logException(e);
+			}
 			return true;
 		}
 		return false;
