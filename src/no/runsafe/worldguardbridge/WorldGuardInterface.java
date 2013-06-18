@@ -219,6 +219,49 @@ public class WorldGuardInterface implements IPluginEnabled
 		return regionManager.hasRegion(name);
 	}
 
+	public boolean redefineRegion(RunsafeWorld world, String name, RunsafeLocation pos1, RunsafeLocation pos2)
+	{
+		if (world == null || worldGuard == null)
+			return false;
+
+		RegionManager regionManager = worldGuard.getRegionManager(world.getRaw());
+		if (regionManager.hasRegion(name))
+			return false;
+
+		CuboidSelection selection = new CuboidSelection(world.getRaw(), pos1.getRaw(), pos2.getRaw());
+		BlockVector min = selection.getNativeMinimumPoint().toBlockVector();
+		BlockVector max = selection.getNativeMaximumPoint().toBlockVector();
+		ProtectedRegion region = new ProtectedCuboidRegion(name, min, max);
+
+		ProtectedRegion existing = regionManager.getRegion(name);
+
+		// Copy details from the old region to the new one
+		region.setMembers(existing.getMembers());
+		region.setOwners(existing.getOwners());
+		region.setFlags(existing.getFlags());
+		region.setPriority(existing.getPriority());
+		try
+		{
+			region.setParent(existing.getParent());
+		}
+		catch (ProtectedRegion.CircularInheritanceException ignore)
+		{
+			// This should not be thrown
+		}
+
+		regionManager.addRegion(region); // Replace region
+		try
+		{
+			regionManager.save();
+			return true;
+		}
+		catch (ProtectionDatabaseException e)
+		{
+			console.logException(e);
+		}
+		return false;
+	}
+
 	public boolean addMemberToRegion(RunsafeWorld world, String name, RunsafePlayer player)
 	{
 		if (!serverHasWorldGuard())
