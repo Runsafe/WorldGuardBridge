@@ -225,7 +225,8 @@ public class WorldGuardInterface implements IPluginEnabled
 			return false;
 
 		RegionManager regionManager = worldGuard.getRegionManager(world.getRaw());
-		if (regionManager.hasRegion(name))
+		ProtectedRegion existing = regionManager.getRegion(name);
+		if (existing == null)
 		{
 			console.fine("Region manager does not know anything about the region %s in world %s!", name, world.getName());
 			return false;
@@ -235,7 +236,6 @@ public class WorldGuardInterface implements IPluginEnabled
 		BlockVector max = selection.getNativeMaximumPoint().toBlockVector();
 		ProtectedRegion region = new ProtectedCuboidRegion(name, min, max);
 
-		ProtectedRegion existing = regionManager.getRegion(name);
 
 		// Copy details from the old region to the new one
 		region.setMembers(existing.getMembers());
