@@ -194,8 +194,8 @@ public class WorldGuardInterface implements IPluginEnabled
 
 		ProtectedRegion region = new ProtectedCuboidRegion(
 			name,
-			new BlockVector(pos1.getBlockX(), pos1.getBlockY(), pos1.getBlockZ()),
-			new BlockVector(pos2.getBlockX(), pos2.getBlockY(), pos2.getBlockZ())
+			new BlockVector(pos1.getX(), pos1.getY(), pos1.getZ()),
+			new BlockVector(pos2.getX(), pos2.getY(), pos2.getZ())
 		);
 		region.getOwners().addPlayer(owner.getName());
 		regionManager.addRegion(region);
