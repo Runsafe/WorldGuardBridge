@@ -20,23 +20,21 @@ public class WorldGuardHooks implements IPlayerBuildPermission, IPlayerPvPFlag
 	@Override
 	public boolean blockPlayerBuilding(RunsafePlayer player, RunsafeLocation location)
 	{
-		if (!worldGuard.serverHasWorldGuard())
-			return false;
-
-		return !worldGuard.getGlobalRegionManager().canBuild(player.getRawPlayer(), location.getRaw());
+		return worldGuard.serverHasWorldGuard()
+			&& !worldGuard.getGlobalRegionManager().canBuild(player.getRawPlayer(), location.getRaw());
 	}
 
 	@Override
-	public boolean isFlaggedForPvP(RunsafePlayer player)
+	public boolean isPvPDisabled(RunsafePlayer player)
 	{
 		if (!worldGuard.serverHasWorldGuard())
-			return true;
+			return false;
 
 		RegionManager manager = worldGuard.getGlobalRegionManager().get(player.getWorld().getRaw());
 		RunsafeLocation playerLocation = player.getLocation();
 		BlockVector location = new BlockVector(playerLocation.getX(), playerLocation.getY(), playerLocation.getZ());
 		ApplicableRegionSet applicable = manager.getApplicableRegions(location);
-		return applicable.allows(DefaultFlag.PVP, worldGuard.wrapPlayer(player.getRawPlayer()));
+		return !applicable.allows(DefaultFlag.PVP, worldGuard.wrapPlayer(player.getRawPlayer()));
 	}
 
 	private final WorldGuardInterface worldGuard;
