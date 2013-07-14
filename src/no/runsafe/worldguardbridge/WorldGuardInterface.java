@@ -71,11 +71,11 @@ public class WorldGuardInterface implements IPluginEnabled
 		return sb.toString();
 	}
 
-    public ProtectedRegion getRegion(RunsafeWorld world, String name)
-    {
-        RegionManager regionManager = worldGuard.getRegionManager(world.getRaw());
-        return regionManager.getRegion(name);
-    }
+	public ProtectedRegion getRegion(RunsafeWorld world, String name)
+	{
+		RegionManager regionManager = worldGuard.getRegionManager(world.getRaw());
+		return regionManager.getRegion(name);
+	}
 
 	public List<String> getRegionsAtLocation(RunsafeLocation location)
 	{
