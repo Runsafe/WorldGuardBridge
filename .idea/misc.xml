@@ -1,7 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="EntryPointsManager">
-    <entry_points version="2.0" />
+    <entry_points version="2.0">
+      <entry_point TYPE="method" FQNAME="no.runsafe.worldguardbridge.WorldGuardInterface boolean isInPvPZone(no.runsafe.framework.minecraft.player.RunsafePlayer player)" />
+      <entry_point TYPE="method" FQNAME="no.runsafe.worldguardbridge.WorldGuardInterface java.lang.String getCurrentRegion(no.runsafe.framework.minecraft.player.RunsafePlayer player)" />
+      <entry_point TYPE="method" FQNAME="no.runsafe.worldguardbridge.WorldGuardInterface com.sk89q.worldguard.protection.regions.ProtectedRegion getRegion(no.runsafe.framework.minecraft.RunsafeWorld world, java.lang.String name)" />
+      <entry_point TYPE="method" FQNAME="no.runsafe.worldguardbridge.WorldGuardInterface java.util.List&lt;java.lang.String&gt; getRegionsAtLocation(no.runsafe.framework.minecraft.RunsafeLocation location)" />
+      <entry_point TYPE="method" FQNAME="no.runsafe.worldguardbridge.WorldGuardInterface java.util.List&lt;java.lang.String&gt; getApplicableRegions(no.runsafe.framework.minecraft.player.RunsafePlayer player)" />
+      <entry_point TYPE="method" FQNAME="no.runsafe.worldguardbridge.WorldGuardInterface java.util.Map&lt;java.lang.String,java.util.Set&lt;java.lang.String&gt;&gt; getAllRegionsWithOwnersInWorld(no.runsafe.framework.minecraft.RunsafeWorld world)" />
+      <entry_point TYPE="method" FQNAME="no.runsafe.worldguardbridge.WorldGuardInterface no.runsafe.framework.minecraft.RunsafeLocation getRegionLocation(no.runsafe.framework.minecraft.RunsafeWorld world, java.lang.String name)" />
+      <entry_point TYPE="method" FQNAME="no.runsafe.worldguardbridge.WorldGuardInterface java.util.Set&lt;java.lang.String&gt; getOwners(no.runsafe.framework.minecraft.RunsafeWorld world, java.lang.String name)" />
+      <entry_point TYPE="method" FQNAME="no.runsafe.worldguardbridge.WorldGuardInterface java.util.Set&lt;java.lang.String&gt; getMembers(no.runsafe.framework.minecraft.RunsafeWorld world, java.lang.String name)" />
+      <entry_point TYPE="method" FQNAME="no.runsafe.worldguardbridge.WorldGuardInterface java.util.List&lt;java.lang.String&gt; getOwnedRegions(no.runsafe.framework.minecraft.player.RunsafePlayer player, no.runsafe.framework.minecraft.RunsafeWorld world)" />
+      <entry_point TYPE="method" FQNAME="no.runsafe.worldguardbridge.WorldGuardInterface java.util.List&lt;java.lang.String&gt; getRegionsInWorld(no.runsafe.framework.minecraft.RunsafeWorld world)" />
+      <entry_point TYPE="method" FQNAME="no.runsafe.worldguardbridge.WorldGuardInterface java.util.Map&lt;java.lang.String,java.awt.geom.Rectangle2D&gt; getRegionRectanglesInWorld(no.runsafe.framework.minecraft.RunsafeWorld world)" />
+      <entry_point TYPE="method" FQNAME="no.runsafe.worldguardbridge.WorldGuardInterface boolean deleteRegion(no.runsafe.framework.minecraft.RunsafeWorld world, java.lang.String name)" />
+      <entry_point TYPE="method" FQNAME="no.runsafe.worldguardbridge.WorldGuardInterface boolean createRegion(no.runsafe.framework.minecraft.player.RunsafePlayer owner, no.runsafe.framework.minecraft.RunsafeWorld world, java.lang.String name, no.runsafe.framework.minecraft.RunsafeLocation pos1, no.runsafe.framework.minecraft.RunsafeLocation pos2)" />
+      <entry_point TYPE="method" FQNAME="no.runsafe.worldguardbridge.WorldGuardInterface boolean redefineRegion(no.runsafe.framework.minecraft.RunsafeWorld world, java.lang.String name, no.runsafe.framework.minecraft.RunsafeLocation pos1, no.runsafe.framework.minecraft.RunsafeLocation pos2)" />
+      <entry_point TYPE="method" FQNAME="no.runsafe.worldguardbridge.WorldGuardInterface boolean addMemberToRegion(no.runsafe.framework.minecraft.RunsafeWorld world, java.lang.String name, no.runsafe.framework.minecraft.player.RunsafePlayer player)" />
+      <entry_point TYPE="method" FQNAME="no.runsafe.worldguardbridge.WorldGuardInterface boolean removeMemberFromRegion(no.runsafe.framework.minecraft.RunsafeWorld world, java.lang.String name, no.runsafe.framework.minecraft.player.RunsafePlayer player)" />
+      <entry_point TYPE="method" FQNAME="no.runsafe.worldguardbridge.WorldGuardInterface java.awt.geom.Rectangle2D getRectangle(no.runsafe.framework.minecraft.RunsafeWorld world, java.lang.String name)" />
+      <entry_point TYPE="method" FQNAME="no.runsafe.worldguardbridge.event.RegionLeaveEvent no.runsafe.framework.minecraft.RunsafeWorld getWorld()" />
+      <entry_point TYPE="method" FQNAME="no.runsafe.worldguardbridge.event.RegionLeaveEvent java.lang.String getRegion()" />
+      <entry_point TYPE="method" FQNAME="no.runsafe.worldguardbridge.event.RegionEnterEvent no.runsafe.framework.minecraft.RunsafeWorld getWorld()" />
+      <entry_point TYPE="method" FQNAME="no.runsafe.worldguardbridge.event.RegionEnterEvent java.lang.String getRegion()" />
+    </entry_points>
   </component>
   <component name="ProjectResources">
     <default-html-doctype>http://www.w3.org/1999/xhtml</default-html-doctype>

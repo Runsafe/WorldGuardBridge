@@ -24,7 +24,8 @@ import org.bukkit.entity.Player;
 import java.awt.geom.Rectangle2D;
 import java.util.*;
 
-public class WorldGuardInterface implements IPluginEnabled
+@SuppressWarnings("WeakerAccess")
+public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 {
 
 	public WorldGuardInterface(IOutput console)
@@ -47,6 +48,7 @@ public class WorldGuardInterface implements IPluginEnabled
 		return this.worldGuard != null;
 	}
 
+	@Override
 	public boolean isInPvPZone(RunsafePlayer player)
 	{
 		if (player == null || !serverHasWorldGuard())
@@ -56,6 +58,7 @@ public class WorldGuardInterface implements IPluginEnabled
 		return set.size() != 0 && set.allows(DefaultFlag.PVP);
 	}
 
+	@Override
 	public String getCurrentRegion(RunsafePlayer player)
 	{
 		RegionManager regionManager = worldGuard.getRegionManager(player.getWorld().getRaw());
@@ -72,12 +75,14 @@ public class WorldGuardInterface implements IPluginEnabled
 		return sb.toString();
 	}
 
+	@Override
 	public ProtectedRegion getRegion(RunsafeWorld world, String name)
 	{
 		RegionManager regionManager = worldGuard.getRegionManager(world.getRaw());
 		return regionManager.getRegion(name);
 	}
 
+	@Override
 	public List<String> getRegionsAtLocation(RunsafeLocation location)
 	{
 		RegionManager regionManager = worldGuard.getRegionManager(location.getWorld().getRaw());
@@ -93,6 +98,7 @@ public class WorldGuardInterface implements IPluginEnabled
 		return regions;
 	}
 
+	@Override
 	public List<String> getApplicableRegions(RunsafePlayer player)
 	{
 		RegionManager regionManager = worldGuard.getRegionManager(player.getWorld().getRaw());
@@ -107,6 +113,7 @@ public class WorldGuardInterface implements IPluginEnabled
 		return regions;
 	}
 
+	@Override
 	public Map<String, Set<String>> getAllRegionsWithOwnersInWorld(RunsafeWorld world)
 	{
 		HashMap<String, Set<String>> result = new HashMap<String, Set<String>>();
@@ -117,6 +124,7 @@ public class WorldGuardInterface implements IPluginEnabled
 		return result;
 	}
 
+	@Override
 	public RunsafeLocation getRegionLocation(RunsafeWorld world, String name)
 	{
 		if (!serverHasWorldGuard())
@@ -129,6 +137,7 @@ public class WorldGuardInterface implements IPluginEnabled
 		return new RunsafeLocation(world, point.getX(), point.getY(), point.getZ());
 	}
 
+	@Override
 	public Set<String> getOwners(RunsafeWorld world, String name)
 	{
 		if (!serverHasWorldGuard())
@@ -137,6 +146,7 @@ public class WorldGuardInterface implements IPluginEnabled
 		return worldGuard.getRegionManager(world.getRaw()).getRegion(name).getOwners().getPlayers();
 	}
 
+	@Override
 	public Set<String> getMembers(RunsafeWorld world, String name)
 	{
 		if (!serverHasWorldGuard())
@@ -145,6 +155,7 @@ public class WorldGuardInterface implements IPluginEnabled
 		return Sets.newHashSet(worldGuard.getRegionManager(world.getRaw()).getRegion(name).getMembers().getPlayers());
 	}
 
+	@Override
 	public List<String> getOwnedRegions(RunsafePlayer player, RunsafeWorld world)
 	{
 		if (world == null || player == null)
@@ -158,12 +169,14 @@ public class WorldGuardInterface implements IPluginEnabled
 		return regions;
 	}
 
+	@Override
 	public List<String> getRegionsInWorld(RunsafeWorld world)
 	{
 		RegionManager regionManager = worldGuard.getRegionManager(world.getRaw());
 		return new ArrayList<String>(regionManager.getRegions().keySet());
 	}
 
+	@Override
 	public Map<String, Rectangle2D> getRegionRectanglesInWorld(RunsafeWorld world)
 	{
 		if (world == null || worldGuard == null)
@@ -183,6 +196,7 @@ public class WorldGuardInterface implements IPluginEnabled
 		return result;
 	}
 
+	@Override
 	public boolean deleteRegion(RunsafeWorld world, String name)
 	{
 		RegionManager regionManager = worldGuard.getRegionManager(world.getRaw());
@@ -200,6 +214,7 @@ public class WorldGuardInterface implements IPluginEnabled
 		return true;
 	}
 
+	@Override
 	public boolean createRegion(RunsafePlayer owner, RunsafeWorld world, String name, RunsafeLocation pos1, RunsafeLocation pos2)
 	{
 		if (world == null || worldGuard == null)
@@ -226,6 +241,7 @@ public class WorldGuardInterface implements IPluginEnabled
 		return regionManager.hasRegion(name);
 	}
 
+	@Override
 	public boolean redefineRegion(RunsafeWorld world, String name, RunsafeLocation pos1, RunsafeLocation pos2)
 	{
 		if (world == null || worldGuard == null)
@@ -271,6 +287,7 @@ public class WorldGuardInterface implements IPluginEnabled
 		return false;
 	}
 
+	@Override
 	public boolean addMemberToRegion(RunsafeWorld world, String name, RunsafePlayer player)
 	{
 		if (!serverHasWorldGuard())
@@ -294,6 +311,7 @@ public class WorldGuardInterface implements IPluginEnabled
 		return false;
 	}
 
+	@Override
 	public boolean removeMemberFromRegion(RunsafeWorld world, String name, RunsafePlayer player)
 	{
 		if (!serverHasWorldGuard())
@@ -317,6 +335,7 @@ public class WorldGuardInterface implements IPluginEnabled
 		return false;
 	}
 
+	@Override
 	public Rectangle2D getRectangle(RunsafeWorld world, String name)
 	{
 		if (!serverHasWorldGuard())

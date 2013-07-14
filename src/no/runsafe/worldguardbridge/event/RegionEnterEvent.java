@@ -7,7 +7,7 @@ import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RegionEnterEvent extends RunsafeCustomEvent
+class RegionEnterEvent extends RunsafeCustomEvent
 {
 	public RegionEnterEvent(RunsafePlayer player, RunsafeWorld world, String region)
 	{

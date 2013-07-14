@@ -116,5 +116,5 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 	private WorldGuardPlugin worldGuard;
 	private final ConcurrentHashMap<String, ConcurrentHashMap<String, ProtectedRegion>> regions =
 		new ConcurrentHashMap<String, ConcurrentHashMap<String, ProtectedRegion>>();
-	private IOutput output;
+	private final IOutput output;
 }

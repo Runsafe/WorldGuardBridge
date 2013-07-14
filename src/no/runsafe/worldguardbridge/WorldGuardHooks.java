@@ -9,7 +9,7 @@ import no.runsafe.framework.api.hook.IPlayerPvPFlag;
 import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.player.RunsafePlayer;
 
-public class WorldGuardHooks implements IPlayerBuildPermission, IPlayerPvPFlag
+class WorldGuardHooks implements IPlayerBuildPermission, IPlayerPvPFlag
 {
 
 	public WorldGuardHooks(WorldGuardInterface worldGuard)
