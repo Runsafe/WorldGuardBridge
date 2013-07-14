@@ -1,5 +1,6 @@
 package no.runsafe.worldguardbridge;
 
+import com.google.common.collect.Sets;
 import com.sk89q.worldedit.BlockVector;
 import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
 import com.sk89q.worldguard.LocalPlayer;
@@ -141,7 +142,7 @@ public class WorldGuardInterface implements IPluginEnabled
 		if (!serverHasWorldGuard())
 			return null;
 
-		return worldGuard.getRegionManager(world.getRaw()).getRegion(name).getMembers().getPlayers();
+		return Sets.newHashSet(worldGuard.getRegionManager(world.getRaw()).getRegion(name).getMembers().getPlayers());
 	}
 
 	public List<String> getOwnedRegions(RunsafePlayer player, RunsafeWorld world)
