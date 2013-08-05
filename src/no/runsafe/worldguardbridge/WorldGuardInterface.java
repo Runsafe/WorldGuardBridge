@@ -118,11 +118,11 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		ApplicableRegionSet set = regionManager.getApplicableRegions(player.getLocation().getRaw());
 		if (set.size() == 0)
 			return null;
+
 		ArrayList<String> regions = new ArrayList<String>();
 		for (ProtectedRegion r : set)
-		{
 			regions.add(r.getId());
-		}
+
 		return regions;
 	}
 
