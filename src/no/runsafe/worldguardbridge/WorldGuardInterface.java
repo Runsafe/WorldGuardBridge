@@ -83,6 +83,19 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	}
 
 	@Override
+	public List<RunsafePlayer> getPlayersInRegion(RunsafeWorld world, String regionName)
+	{
+		List<RunsafePlayer> worldPlayers = world.getPlayers();
+		List<RunsafePlayer> regionPlayers = new ArrayList<RunsafePlayer>();
+
+		for (RunsafePlayer player : worldPlayers)
+			if (this.getApplicableRegions(player).contains(regionName))
+				regionPlayers.add(player);
+
+		return regionPlayers;
+	}
+
+	@Override
 	public List<String> getRegionsAtLocation(RunsafeLocation location)
 	{
 		RegionManager regionManager = worldGuard.getRegionManager(location.getWorld().getRaw());
