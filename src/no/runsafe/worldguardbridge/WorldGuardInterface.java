@@ -89,8 +89,11 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		List<RunsafePlayer> regionPlayers = new ArrayList<RunsafePlayer>();
 
 		for (RunsafePlayer player : worldPlayers)
-			if (this.getApplicableRegions(player).contains(regionName))
+		{
+			List<String> playerRegions = this.getApplicableRegions(player);
+			if (playerRegions != null && playerRegions.contains(regionName))
 				regionPlayers.add(player);
+		}
 
 		return regionPlayers;
 	}
