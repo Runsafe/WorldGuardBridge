@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="WorldGuard">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/worldguard.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../Mergic/lib/worldguard.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

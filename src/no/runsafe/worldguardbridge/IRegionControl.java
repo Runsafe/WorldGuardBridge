@@ -18,6 +18,8 @@ public interface IRegionControl
 
 	ProtectedRegion getRegion(RunsafeWorld world, String name);
 
+	List<RunsafePlayer> getPlayersInRegion(RunsafeWorld world, String regionName);
+
 	List<String> getRegionsAtLocation(RunsafeLocation location);
 
 	List<String> getApplicableRegions(RunsafePlayer player);
