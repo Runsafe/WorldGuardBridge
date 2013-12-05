@@ -13,6 +13,7 @@ import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import no.runsafe.framework.api.IDebug;
 import no.runsafe.framework.api.IOutput;
 import no.runsafe.framework.api.event.plugin.IPluginEnabled;
 import no.runsafe.framework.minecraft.RunsafeLocation;
@@ -28,16 +29,16 @@ import java.util.*;
 public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 {
 
-	public WorldGuardInterface(IOutput console)
+	public WorldGuardInterface(IDebug console)
 	{
-		this.console = console;
+		this.debugger = console;
 	}
 
 	@Override
 	public void OnPluginEnabled()
 	{
 		if (!serverHasWorldGuard())
-			console.write("Could not find WorldGuard on this server!");
+			debugger.logError("Could not find WorldGuard on this server!");
 	}
 
 	public boolean serverHasWorldGuard()
@@ -225,7 +226,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		}
 		catch (ProtectionDatabaseException e)
 		{
-			console.logException(e);
+			debugger.logException(e);
 		}
 		return true;
 	}
@@ -252,7 +253,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		}
 		catch (ProtectionDatabaseException e)
 		{
-			console.logException(e);
+			debugger.logException(e);
 		}
 		return regionManager.hasRegion(name);
 	}
@@ -267,7 +268,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		ProtectedRegion existing = regionManager.getRegion(name);
 		if (existing == null)
 		{
-			console.fine("Region manager does not know anything about the region %s in world %s!", name, world.getName());
+			debugger.debugFine("Region manager does not know anything about the region %s in world %s!", name, world.getName());
 			return false;
 		}
 		CuboidSelection selection = new CuboidSelection(world.getRaw(), pos1.getRaw(), pos2.getRaw());
@@ -298,7 +299,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		}
 		catch (ProtectionDatabaseException e)
 		{
-			console.logException(e);
+			debugger.logException(e);
 		}
 		return false;
 	}
@@ -320,7 +321,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 			}
 			catch (ProtectionDatabaseException e)
 			{
-				console.logException(e);
+				debugger.logException(e);
 			}
 			return true;
 		}
@@ -344,7 +345,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 			}
 			catch (ProtectionDatabaseException e)
 			{
-				console.logException(e);
+				debugger.logException(e);
 			}
 			return true;
 		}
@@ -377,5 +378,5 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	}
 
 	private WorldGuardPlugin worldGuard;
-	private final IOutput console;
+	private final IDebug debugger;
 }

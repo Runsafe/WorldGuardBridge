@@ -4,7 +4,7 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import no.runsafe.framework.api.IConfiguration;
-import no.runsafe.framework.api.IOutput;
+import no.runsafe.framework.api.IDebug;
 import no.runsafe.framework.api.event.IAsyncEvent;
 import no.runsafe.framework.api.event.player.IPlayerMove;
 import no.runsafe.framework.api.event.player.IPlayerTeleport;
@@ -19,9 +19,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurationChanged, IPlayerTeleport
 {
-	public RegionBorderPatrol(IOutput output)
+	public RegionBorderPatrol(IDebug output)
 	{
-		this.output = output;
+		this.debugger = output;
 	}
 
 	@Override
@@ -62,9 +62,9 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 				regionAmount += 1;
 				worldRegions.putIfAbsent(region, regions.get(region));
 			}
-			output.writeColoured("&2Loaded &a%d&2 regions in world &a%s&2.&r", worldRegions.size(), world.getName());
+			debugger.logInformation("&2Loaded &a%d&2 regions in world &a%s&2.&r", worldRegions.size(), world.getName());
 		}
-		output.writeColoured("&2Loaded &a%d&2 regions across &a%d&2 worlds.&r", regionAmount, regions.size());
+		debugger.logInformation("&2Loaded &a%d&2 regions across &a%d&2 worlds.&r", regionAmount, regions.size());
 	}
 
 	private boolean serverHasWorldGuard()
@@ -85,7 +85,7 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 			ProtectedRegion area = worldRegions.get(region);
 			if (isInside(area, to.getWorld(), to) && !isInside(area, to.getWorld(), from))
 			{
-				output.fine("Player is entering the region %s, sending notification!", region);
+				debugger.debugFine("Player is entering the region %s, sending notification!", region);
 				new RegionEnterEvent(player, to.getWorld(), region).Fire();
 			}
 		}
@@ -101,7 +101,7 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 			ProtectedRegion area = worldRegions.get(region);
 			if (!isInside(area, from.getWorld(), to) && isInside(area, from.getWorld(), from))
 			{
-				output.fine("Player is leaving the region %s, sending notification!", region);
+				debugger.debugFine("Player is leaving the region %s, sending notification!", region);
 				new RegionLeaveEvent(player, from.getWorld(), region).Fire();
 			}
 		}
@@ -116,5 +116,5 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 	private WorldGuardPlugin worldGuard;
 	private final ConcurrentHashMap<String, ConcurrentHashMap<String, ProtectedRegion>> regions =
 		new ConcurrentHashMap<String, ConcurrentHashMap<String, ProtectedRegion>>();
-	private final IOutput output;
+	private final IDebug debugger;
 }
