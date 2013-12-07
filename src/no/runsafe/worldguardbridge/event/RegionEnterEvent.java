@@ -1,7 +1,7 @@
 package no.runsafe.worldguardbridge.event;
 
+import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.player.IPlayer;
-import no.runsafe.framework.minecraft.RunsafeWorld;
 import no.runsafe.framework.minecraft.event.player.RunsafeCustomEvent;
 
 import java.util.HashMap;
@@ -9,14 +9,14 @@ import java.util.Map;
 
 public class RegionEnterEvent extends RunsafeCustomEvent
 {
-	public RegionEnterEvent(IPlayer player, RunsafeWorld world, String region)
+	public RegionEnterEvent(IPlayer player, IWorld world, String region)
 	{
 		super(player, "region.enter");
 		this.world = world;
 		this.region = region;
 	}
 
-	public RunsafeWorld getWorld()
+	public IWorld getWorld()
 	{
 		return world;
 	}
@@ -35,6 +35,6 @@ public class RegionEnterEvent extends RunsafeCustomEvent
 		return data;
 	}
 
-	private final RunsafeWorld world;
+	private final IWorld world;
 	private final String region;
 }

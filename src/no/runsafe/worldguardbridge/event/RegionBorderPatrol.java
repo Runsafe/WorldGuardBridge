@@ -5,14 +5,16 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.IDebug;
+import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.event.IAsyncEvent;
 import no.runsafe.framework.api.event.player.IPlayerMove;
 import no.runsafe.framework.api.event.player.IPlayerTeleport;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.api.player.IPlayer;
+import no.runsafe.framework.internal.wrapper.ObjectUnwrapper;
 import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.RunsafeServer;
-import no.runsafe.framework.minecraft.RunsafeWorld;
+import org.bukkit.World;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -48,13 +50,13 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 		regions.clear();
 		if (!serverHasWorldGuard())
 			return;
-		for (RunsafeWorld world : RunsafeServer.Instance.getWorlds())
+		for (IWorld world : RunsafeServer.Instance.getWorlds())
 		{
 			if (!regions.containsKey(world.getName()))
 				regions.putIfAbsent(world.getName(), new ConcurrentHashMap<String, ProtectedRegion>());
 
 			ConcurrentHashMap<String, ProtectedRegion> worldRegions = regions.get(world.getName());
-			RegionManager manager = worldGuard.getRegionManager(world.getRaw());
+			RegionManager manager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world));
 			Map<String, ProtectedRegion> regions = manager.getRegions();
 
 			for (String region : regions.keySet())
@@ -107,7 +109,7 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 		}
 	}
 
-	private boolean isInside(ProtectedRegion area, RunsafeWorld world, RunsafeLocation location)
+	private boolean isInside(ProtectedRegion area, IWorld world, RunsafeLocation location)
 	{
 		return world.equals(location.getWorld())
 			&& area.contains(location.getBlockX(), location.getBlockY(), location.getBlockZ());
