@@ -1,15 +1,15 @@
 package no.runsafe.worldguardbridge.event;
 
+import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.RunsafeWorld;
 import no.runsafe.framework.minecraft.event.player.RunsafeCustomEvent;
-import no.runsafe.framework.minecraft.player.RunsafePlayer;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class RegionEnterEvent extends RunsafeCustomEvent
 {
-	public RegionEnterEvent(RunsafePlayer player, RunsafeWorld world, String region)
+	public RegionEnterEvent(IPlayer player, RunsafeWorld world, String region)
 	{
 		super(player, "region.enter");
 		this.world = world;

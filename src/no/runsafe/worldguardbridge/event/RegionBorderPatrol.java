@@ -9,10 +9,10 @@ import no.runsafe.framework.api.event.IAsyncEvent;
 import no.runsafe.framework.api.event.player.IPlayerMove;
 import no.runsafe.framework.api.event.player.IPlayerTeleport;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
+import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.RunsafeWorld;
-import no.runsafe.framework.minecraft.player.RunsafePlayer;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,13 +25,13 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 	}
 
 	@Override
-	public boolean OnPlayerTeleport(RunsafePlayer player, RunsafeLocation from, RunsafeLocation to)
+	public boolean OnPlayerTeleport(IPlayer player, RunsafeLocation from, RunsafeLocation to)
 	{
 		return OnPlayerMove(player, from, to);
 	}
 
 	@Override
-	public boolean OnPlayerMove(RunsafePlayer player, RunsafeLocation from, RunsafeLocation to)
+	public boolean OnPlayerMove(IPlayer player, RunsafeLocation from, RunsafeLocation to)
 	{
 		if (serverHasWorldGuard())
 		{
@@ -75,7 +75,7 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 		return this.worldGuard != null;
 	}
 
-	private void CheckIfEnteringRegion(RunsafePlayer player, RunsafeLocation from, RunsafeLocation to)
+	private void CheckIfEnteringRegion(IPlayer player, RunsafeLocation from, RunsafeLocation to)
 	{
 		if (!regions.containsKey(to.getWorld().getName()))
 			return;
@@ -91,7 +91,7 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 		}
 	}
 
-	private void CheckIfLeavingRegion(RunsafePlayer player, RunsafeLocation from, RunsafeLocation to)
+	private void CheckIfLeavingRegion(IPlayer player, RunsafeLocation from, RunsafeLocation to)
 	{
 		if (!regions.containsKey(from.getWorld().getName()))
 			return;
