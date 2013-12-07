@@ -14,12 +14,11 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import no.runsafe.framework.api.IDebug;
-import no.runsafe.framework.api.IOutput;
 import no.runsafe.framework.api.event.plugin.IPluginEnabled;
+import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.RunsafeServer;
 import no.runsafe.framework.minecraft.RunsafeWorld;
-import no.runsafe.framework.minecraft.player.RunsafePlayer;
 import org.bukkit.entity.Player;
 
 import java.awt.geom.Rectangle2D;
@@ -50,7 +49,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	}
 
 	@Override
-	public boolean isInPvPZone(RunsafePlayer player)
+	public boolean isInPvPZone(IPlayer player)
 	{
 		if (player == null || !serverHasWorldGuard())
 			return false;
@@ -60,7 +59,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	}
 
 	@Override
-	public String getCurrentRegion(RunsafePlayer player)
+	public String getCurrentRegion(IPlayer player)
 	{
 		RegionManager regionManager = worldGuard.getRegionManager(player.getWorld().getRaw());
 		ApplicableRegionSet set = regionManager.getApplicableRegions(player.getLocation().getRaw());
@@ -84,12 +83,12 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	}
 
 	@Override
-	public List<RunsafePlayer> getPlayersInRegion(RunsafeWorld world, String regionName)
+	public List<IPlayer> getPlayersInRegion(RunsafeWorld world, String regionName)
 	{
-		List<RunsafePlayer> worldPlayers = world.getPlayers();
-		List<RunsafePlayer> regionPlayers = new ArrayList<RunsafePlayer>();
+		List<IPlayer> worldPlayers = world.getPlayers();
+		List<IPlayer> regionPlayers = new ArrayList<IPlayer>();
 
-		for (RunsafePlayer player : worldPlayers)
+		for (IPlayer player : worldPlayers)
 		{
 			List<String> playerRegions = this.getApplicableRegions(player);
 			if (playerRegions != null && playerRegions.contains(regionName))
@@ -116,7 +115,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	}
 
 	@Override
-	public List<String> getApplicableRegions(RunsafePlayer player)
+	public List<String> getApplicableRegions(IPlayer player)
 	{
 		RegionManager regionManager = worldGuard.getRegionManager(player.getWorld().getRaw());
 		ApplicableRegionSet set = regionManager.getApplicableRegions(player.getLocation().getRaw());
@@ -173,7 +172,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	}
 
 	@Override
-	public List<String> getOwnedRegions(RunsafePlayer player, RunsafeWorld world)
+	public List<String> getOwnedRegions(IPlayer player, RunsafeWorld world)
 	{
 		if (world == null || player == null)
 			return null;
@@ -232,7 +231,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	}
 
 	@Override
-	public boolean createRegion(RunsafePlayer owner, RunsafeWorld world, String name, RunsafeLocation pos1, RunsafeLocation pos2)
+	public boolean createRegion(IPlayer owner, RunsafeWorld world, String name, RunsafeLocation pos1, RunsafeLocation pos2)
 	{
 		if (world == null || worldGuard == null)
 			return false;
@@ -305,7 +304,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	}
 
 	@Override
-	public boolean addMemberToRegion(RunsafeWorld world, String name, RunsafePlayer player)
+	public boolean addMemberToRegion(RunsafeWorld world, String name, IPlayer player)
 	{
 		if (!serverHasWorldGuard())
 			return false;
@@ -329,7 +328,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	}
 
 	@Override
-	public boolean removeMemberFromRegion(RunsafeWorld world, String name, RunsafePlayer player)
+	public boolean removeMemberFromRegion(RunsafeWorld world, String name, IPlayer player)
 	{
 		if (!serverHasWorldGuard())
 			return false;

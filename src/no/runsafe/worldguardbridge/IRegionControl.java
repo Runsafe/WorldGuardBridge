@@ -1,9 +1,9 @@
 package no.runsafe.worldguardbridge;
 
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.RunsafeWorld;
-import no.runsafe.framework.minecraft.player.RunsafePlayer;
 
 import java.awt.geom.Rectangle2D;
 import java.util.List;
@@ -12,17 +12,17 @@ import java.util.Set;
 
 public interface IRegionControl
 {
-	boolean isInPvPZone(RunsafePlayer player);
+	boolean isInPvPZone(IPlayer player);
 
-	String getCurrentRegion(RunsafePlayer player);
+	String getCurrentRegion(IPlayer player);
 
 	ProtectedRegion getRegion(RunsafeWorld world, String name);
 
-	List<RunsafePlayer> getPlayersInRegion(RunsafeWorld world, String regionName);
+	List<IPlayer> getPlayersInRegion(RunsafeWorld world, String regionName);
 
 	List<String> getRegionsAtLocation(RunsafeLocation location);
 
-	List<String> getApplicableRegions(RunsafePlayer player);
+	List<String> getApplicableRegions(IPlayer player);
 
 	Map<String, Set<String>> getAllRegionsWithOwnersInWorld(RunsafeWorld world);
 
@@ -32,7 +32,7 @@ public interface IRegionControl
 
 	Set<String> getMembers(RunsafeWorld world, String name);
 
-	List<String> getOwnedRegions(RunsafePlayer player, RunsafeWorld world);
+	List<String> getOwnedRegions(IPlayer player, RunsafeWorld world);
 
 	List<String> getRegionsInWorld(RunsafeWorld world);
 
@@ -40,13 +40,13 @@ public interface IRegionControl
 
 	boolean deleteRegion(RunsafeWorld world, String name);
 
-	boolean createRegion(RunsafePlayer owner, RunsafeWorld world, String name, RunsafeLocation pos1, RunsafeLocation pos2);
+	boolean createRegion(IPlayer owner, RunsafeWorld world, String name, RunsafeLocation pos1, RunsafeLocation pos2);
 
 	boolean redefineRegion(RunsafeWorld world, String name, RunsafeLocation pos1, RunsafeLocation pos2);
 
-	boolean addMemberToRegion(RunsafeWorld world, String name, RunsafePlayer player);
+	boolean addMemberToRegion(RunsafeWorld world, String name, IPlayer player);
 
-	boolean removeMemberFromRegion(RunsafeWorld world, String name, RunsafePlayer player);
+	boolean removeMemberFromRegion(RunsafeWorld world, String name, IPlayer player);
 
 	Rectangle2D getRectangle(RunsafeWorld world, String name);
 }
