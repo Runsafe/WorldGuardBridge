@@ -14,12 +14,14 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import no.runsafe.framework.api.IDebug;
+import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.event.plugin.IPluginEnabled;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.internal.wrapper.ObjectUnwrapper;
 import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.RunsafeServer;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -56,7 +58,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		if (player == null || !serverHasWorldGuard())
 			return false;
 		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(player.getWorld()));
-		ApplicableRegionSet set = regionManager.getApplicableRegions(player.getLocation().getRaw());
+		ApplicableRegionSet set = regionManager.getApplicableRegions((Location) ObjectUnwrapper.convert(player.getLocation()));
 		return set.size() != 0 && set.allows(DefaultFlag.PVP);
 	}
 
@@ -64,7 +66,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	public String getCurrentRegion(IPlayer player)
 	{
 		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(player.getWorld()));
-		ApplicableRegionSet set = regionManager.getApplicableRegions(player.getLocation().getRaw());
+		ApplicableRegionSet set = regionManager.getApplicableRegions((Location) ObjectUnwrapper.convert(player.getLocation()));
 		if (set.size() == 0)
 			return null;
 		StringBuilder sb = new StringBuilder();
@@ -101,10 +103,10 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	}
 
 	@Override
-	public List<String> getRegionsAtLocation(RunsafeLocation location)
+	public List<String> getRegionsAtLocation(ILocation location)
 	{
 		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(location.getWorld()));
-		ApplicableRegionSet set = regionManager.getApplicableRegions(location.getRaw());
+		ApplicableRegionSet set = regionManager.getApplicableRegions((Location) ObjectUnwrapper.convert(location));
 
 		if (set.size() == 0)
 			return null;
@@ -120,7 +122,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	public List<String> getApplicableRegions(IPlayer player)
 	{
 		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(player.getWorld()));
-		ApplicableRegionSet set = regionManager.getApplicableRegions(player.getLocation().getRaw());
+		ApplicableRegionSet set = regionManager.getApplicableRegions((Location) ObjectUnwrapper.convert(player.getLocation()));
 		if (set.size() == 0)
 			return null;
 
@@ -143,7 +145,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	}
 
 	@Override
-	public RunsafeLocation getRegionLocation(IWorld world, String name)
+	public ILocation getRegionLocation(IWorld world, String name)
 	{
 		if (!serverHasWorldGuard())
 			return null;
@@ -233,7 +235,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	}
 
 	@Override
-	public boolean createRegion(IPlayer owner, IWorld world, String name, RunsafeLocation pos1, RunsafeLocation pos2)
+	public boolean createRegion(IPlayer owner, IWorld world, String name, ILocation pos1, ILocation pos2)
 	{
 		if (world == null || worldGuard == null)
 			return false;
@@ -242,7 +244,11 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		if (regionManager.hasRegion(name))
 			return false;
 
-		CuboidSelection selection = new CuboidSelection((World) ObjectUnwrapper.convert(world), pos1.getRaw(), pos2.getRaw());
+		CuboidSelection selection = new CuboidSelection(
+			(World) ObjectUnwrapper.convert(world),
+			(Location) ObjectUnwrapper.convert(pos1),
+			(Location) ObjectUnwrapper.convert(pos2)
+		);
 		BlockVector min = selection.getNativeMinimumPoint().toBlockVector();
 		BlockVector max = selection.getNativeMaximumPoint().toBlockVector();
 		ProtectedRegion region = new ProtectedCuboidRegion(name, min, max);
@@ -260,7 +266,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	}
 
 	@Override
-	public boolean redefineRegion(IWorld world, String name, RunsafeLocation pos1, RunsafeLocation pos2)
+	public boolean redefineRegion(IWorld world, String name, ILocation pos1, ILocation pos2)
 	{
 		if (world == null || worldGuard == null)
 			return false;
@@ -272,7 +278,11 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 			debugger.debugFine("Region manager does not know anything about the region %s in world %s!", name, world.getName());
 			return false;
 		}
-		CuboidSelection selection = new CuboidSelection((World) ObjectUnwrapper.convert(world), pos1.getRaw(), pos2.getRaw());
+		CuboidSelection selection = new CuboidSelection(
+			(World) ObjectUnwrapper.convert(world),
+			(Location) ObjectUnwrapper.convert(pos1),
+			(Location) ObjectUnwrapper.convert(pos2)
+		);
 		BlockVector min = selection.getNativeMinimumPoint().toBlockVector();
 		BlockVector max = selection.getNativeMaximumPoint().toBlockVector();
 		ProtectedRegion region = new ProtectedCuboidRegion(name, min, max);

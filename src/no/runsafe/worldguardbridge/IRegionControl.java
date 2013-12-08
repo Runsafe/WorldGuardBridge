@@ -1,9 +1,9 @@
 package no.runsafe.worldguardbridge;
 
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.player.IPlayer;
-import no.runsafe.framework.minecraft.RunsafeLocation;
 
 import java.awt.geom.Rectangle2D;
 import java.util.List;
@@ -20,13 +20,13 @@ public interface IRegionControl
 
 	List<IPlayer> getPlayersInRegion(IWorld world, String regionName);
 
-	List<String> getRegionsAtLocation(RunsafeLocation location);
+	List<String> getRegionsAtLocation(ILocation location);
 
 	List<String> getApplicableRegions(IPlayer player);
 
 	Map<String, Set<String>> getAllRegionsWithOwnersInWorld(IWorld world);
 
-	RunsafeLocation getRegionLocation(IWorld world, String name);
+	ILocation getRegionLocation(IWorld world, String name);
 
 	Set<String> getOwners(IWorld world, String name);
 
@@ -40,9 +40,9 @@ public interface IRegionControl
 
 	boolean deleteRegion(IWorld world, String name);
 
-	boolean createRegion(IPlayer owner, IWorld world, String name, RunsafeLocation pos1, RunsafeLocation pos2);
+	boolean createRegion(IPlayer owner, IWorld world, String name, ILocation pos1, ILocation pos2);
 
-	boolean redefineRegion(IWorld world, String name, RunsafeLocation pos1, RunsafeLocation pos2);
+	boolean redefineRegion(IWorld world, String name, ILocation pos1, ILocation pos2);
 
 	boolean addMemberToRegion(IWorld world, String name, IPlayer player);
 

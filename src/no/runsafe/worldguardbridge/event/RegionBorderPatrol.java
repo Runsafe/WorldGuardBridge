@@ -5,6 +5,7 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.IDebug;
+import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.event.IAsyncEvent;
 import no.runsafe.framework.api.event.player.IPlayerMove;
@@ -12,7 +13,6 @@ import no.runsafe.framework.api.event.player.IPlayerTeleport;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.internal.wrapper.ObjectUnwrapper;
-import no.runsafe.framework.minecraft.RunsafeLocation;
 import no.runsafe.framework.minecraft.RunsafeServer;
 import org.bukkit.World;
 
@@ -27,13 +27,13 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 	}
 
 	@Override
-	public boolean OnPlayerTeleport(IPlayer player, RunsafeLocation from, RunsafeLocation to)
+	public boolean OnPlayerTeleport(IPlayer player, ILocation from, ILocation to)
 	{
 		return OnPlayerMove(player, from, to);
 	}
 
 	@Override
-	public boolean OnPlayerMove(IPlayer player, RunsafeLocation from, RunsafeLocation to)
+	public boolean OnPlayerMove(IPlayer player, ILocation from, ILocation to)
 	{
 		if (serverHasWorldGuard())
 		{
@@ -77,7 +77,7 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 		return this.worldGuard != null;
 	}
 
-	private void CheckIfEnteringRegion(IPlayer player, RunsafeLocation from, RunsafeLocation to)
+	private void CheckIfEnteringRegion(IPlayer player, ILocation from, ILocation to)
 	{
 		if (!regions.containsKey(to.getWorld().getName()))
 			return;
@@ -93,7 +93,7 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 		}
 	}
 
-	private void CheckIfLeavingRegion(IPlayer player, RunsafeLocation from, RunsafeLocation to)
+	private void CheckIfLeavingRegion(IPlayer player, ILocation from, ILocation to)
 	{
 		if (!regions.containsKey(from.getWorld().getName()))
 			return;
@@ -109,7 +109,7 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 		}
 	}
 
-	private boolean isInside(ProtectedRegion area, IWorld world, RunsafeLocation location)
+	private boolean isInside(ProtectedRegion area, IWorld world, ILocation location)
 	{
 		return world.equals(location.getWorld())
 			&& area.contains(location.getBlockX(), location.getBlockY(), location.getBlockZ());
