@@ -25,10 +25,8 @@ public class WorldGuardHooks implements IPlayerBuildPermission, IPlayerPvPFlag
 	public boolean blockPlayerBuilding(IPlayer player, ILocation location)
 	{
 		return worldGuard.serverHasWorldGuard()
-			&& !worldGuard.getGlobalRegionManager().canBuild(
-				(Player) ObjectUnwrapper.convert(player),
-				(Location) ObjectUnwrapper.convert(location)
-			);
+			&& !worldGuard.getGlobalRegionManager()
+			.canBuild((Player) ObjectUnwrapper.convert(player), (Location) ObjectUnwrapper.convert(location));
 	}
 
 	@Override
