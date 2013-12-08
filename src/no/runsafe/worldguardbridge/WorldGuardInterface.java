@@ -15,12 +15,12 @@ import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import no.runsafe.framework.api.IDebug;
 import no.runsafe.framework.api.ILocation;
+import no.runsafe.framework.api.IServer;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.event.plugin.IPluginEnabled;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.internal.wrapper.ObjectUnwrapper;
 import no.runsafe.framework.minecraft.RunsafeLocation;
-import no.runsafe.framework.minecraft.RunsafeServer;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -32,9 +32,10 @@ import java.util.*;
 public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 {
 
-	public WorldGuardInterface(IDebug console)
+	public WorldGuardInterface(IDebug console, IServer server)
 	{
 		this.debugger = console;
+		this.server = server;
 	}
 
 	@Override
@@ -47,7 +48,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	public boolean serverHasWorldGuard()
 	{
 		if (this.worldGuard == null)
-			this.worldGuard = RunsafeServer.Instance.getPlugin("WorldGuard");
+			this.worldGuard = server.getPlugin("WorldGuard");
 
 		return this.worldGuard != null;
 	}
@@ -390,4 +391,5 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 
 	private WorldGuardPlugin worldGuard;
 	private final IDebug debugger;
+	private final IServer server;
 }

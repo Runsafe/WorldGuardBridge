@@ -3,17 +3,13 @@ package no.runsafe.worldguardbridge.event;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import no.runsafe.framework.api.IConfiguration;
-import no.runsafe.framework.api.IDebug;
-import no.runsafe.framework.api.ILocation;
-import no.runsafe.framework.api.IWorld;
+import no.runsafe.framework.api.*;
 import no.runsafe.framework.api.event.IAsyncEvent;
 import no.runsafe.framework.api.event.player.IPlayerMove;
 import no.runsafe.framework.api.event.player.IPlayerTeleport;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.internal.wrapper.ObjectUnwrapper;
-import no.runsafe.framework.minecraft.RunsafeServer;
 import org.bukkit.World;
 
 import java.util.Map;
@@ -21,9 +17,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurationChanged, IPlayerTeleport
 {
-	public RegionBorderPatrol(IDebug output)
+	public RegionBorderPatrol(IDebug output, IServer server)
 	{
 		this.debugger = output;
+		this.server = server;
 	}
 
 	@Override
@@ -50,7 +47,7 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 		regions.clear();
 		if (!serverHasWorldGuard())
 			return;
-		for (IWorld world : RunsafeServer.Instance.getWorlds())
+		for (IWorld world : server.getWorlds())
 		{
 			if (!regions.containsKey(world.getName()))
 				regions.putIfAbsent(world.getName(), new ConcurrentHashMap<String, ProtectedRegion>());
@@ -72,7 +69,7 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 	private boolean serverHasWorldGuard()
 	{
 		if (this.worldGuard == null)
-			this.worldGuard = RunsafeServer.Instance.getPlugin("WorldGuard");
+			this.worldGuard = server.getPlugin("WorldGuard");
 
 		return this.worldGuard != null;
 	}
@@ -119,4 +116,5 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 	private final ConcurrentHashMap<String, ConcurrentHashMap<String, ProtectedRegion>> regions =
 		new ConcurrentHashMap<String, ConcurrentHashMap<String, ProtectedRegion>>();
 	private final IDebug debugger;
+	private final IServer server;
 }
