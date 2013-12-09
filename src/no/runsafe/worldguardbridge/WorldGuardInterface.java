@@ -17,6 +17,7 @@ import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.IServer;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.event.plugin.IPluginEnabled;
+import no.runsafe.framework.api.log.IConsole;
 import no.runsafe.framework.api.log.IDebug;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.internal.wrapper.ObjectUnwrapper;
@@ -32,9 +33,10 @@ import java.util.*;
 public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 {
 
-	public WorldGuardInterface(IDebug console, IServer server)
+	public WorldGuardInterface(IDebug console, IConsole console1, IServer server)
 	{
 		this.debugger = console;
+		this.console = console1;
 		this.server = server;
 	}
 
@@ -42,7 +44,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	public void OnPluginEnabled()
 	{
 		if (!serverHasWorldGuard())
-			debugger.logError("Could not find WorldGuard on this server!");
+			console.logError("Could not find WorldGuard on this server!");
 	}
 
 	public boolean serverHasWorldGuard()
@@ -230,7 +232,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		}
 		catch (ProtectionDatabaseException e)
 		{
-			debugger.logException(e);
+			console.logException(e);
 		}
 		return true;
 	}
@@ -261,7 +263,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		}
 		catch (ProtectionDatabaseException e)
 		{
-			debugger.logException(e);
+			console.logException(e);
 		}
 		return regionManager.hasRegion(name);
 	}
@@ -311,7 +313,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		}
 		catch (ProtectionDatabaseException e)
 		{
-			debugger.logException(e);
+			console.logException(e);
 		}
 		return false;
 	}
@@ -333,7 +335,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 			}
 			catch (ProtectionDatabaseException e)
 			{
-				debugger.logException(e);
+				console.logException(e);
 			}
 			return true;
 		}
@@ -357,7 +359,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 			}
 			catch (ProtectionDatabaseException e)
 			{
-				debugger.logException(e);
+				console.logException(e);
 			}
 			return true;
 		}
@@ -391,5 +393,6 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 
 	private WorldGuardPlugin worldGuard;
 	private final IDebug debugger;
+	private final IConsole console;
 	private final IServer server;
 }

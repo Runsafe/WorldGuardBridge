@@ -11,6 +11,7 @@ import no.runsafe.framework.api.event.IAsyncEvent;
 import no.runsafe.framework.api.event.player.IPlayerMove;
 import no.runsafe.framework.api.event.player.IPlayerTeleport;
 import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
+import no.runsafe.framework.api.log.IConsole;
 import no.runsafe.framework.api.log.IDebug;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.internal.wrapper.ObjectUnwrapper;
@@ -21,9 +22,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurationChanged, IPlayerTeleport
 {
-	public RegionBorderPatrol(IDebug output, IServer server)
+	public RegionBorderPatrol(IDebug output, IConsole console, IServer server)
 	{
 		this.debugger = output;
+		this.console = console;
 		this.server = server;
 	}
 
@@ -65,9 +67,9 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 				regionAmount += 1;
 				worldRegions.putIfAbsent(region, regions.get(region));
 			}
-			debugger.logInformation("&2Loaded &a%d&2 regions in world &a%s&2.&r", worldRegions.size(), world.getName());
+			console.logInformation("&2Loaded &a%d&2 regions in world &a%s&2.&r", worldRegions.size(), world.getName());
 		}
-		debugger.logInformation("&2Loaded &a%d&2 regions across &a%d&2 worlds.&r", regionAmount, regions.size());
+		console.logInformation("&2Loaded &a%d&2 regions across &a%d&2 worlds.&r", regionAmount, regions.size());
 	}
 
 	private boolean serverHasWorldGuard()
@@ -120,5 +122,6 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 	private final ConcurrentHashMap<String, ConcurrentHashMap<String, ProtectedRegion>> regions =
 		new ConcurrentHashMap<String, ConcurrentHashMap<String, ProtectedRegion>>();
 	private final IDebug debugger;
+	private final IConsole console;
 	private final IServer server;
 }
