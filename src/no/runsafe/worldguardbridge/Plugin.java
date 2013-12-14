@@ -8,7 +8,7 @@ public class Plugin extends RunsafeConfigurablePlugin
 	@Override
 	protected void PluginSetup()
 	{
-		this.addComponent(WorldGuardInterface.class);
+		exportAPI(getInstance(WorldGuardInterface.class));
 		this.addComponent(WorldGuardHooks.class);
 		this.addComponent(RegionBorderPatrol.class);
 	}
