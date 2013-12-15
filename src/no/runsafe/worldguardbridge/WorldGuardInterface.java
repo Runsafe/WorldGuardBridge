@@ -85,6 +85,8 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	@Override
 	public ProtectedRegion getRegion(IWorld world, String name)
 	{
+		if (!serverHasWorldGuard())
+			return null;
 		if (world == null)
 			return null;
 		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world));
