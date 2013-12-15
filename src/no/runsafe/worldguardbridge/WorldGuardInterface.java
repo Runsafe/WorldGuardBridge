@@ -32,7 +32,6 @@ import java.util.*;
 @SuppressWarnings("WeakerAccess")
 public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 {
-
 	public WorldGuardInterface(IDebug console, IConsole console1, IServer server)
 	{
 		this.debugger = console;
@@ -86,7 +85,11 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	@Override
 	public ProtectedRegion getRegion(IWorld world, String name)
 	{
+		if (world == null)
+			return null;
 		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world));
+		if (regionManager == null)
+			return null;
 		return regionManager.getRegion(name);
 	}
 
