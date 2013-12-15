@@ -12,6 +12,8 @@ import java.util.Set;
 
 public interface IRegionControl
 {
+	boolean serverHasWorldGuard();
+
 	boolean isInPvPZone(IPlayer player);
 
 	String getCurrentRegion(IPlayer player);

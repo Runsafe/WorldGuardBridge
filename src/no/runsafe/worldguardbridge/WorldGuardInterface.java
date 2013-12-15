@@ -47,6 +47,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 			console.logError("Could not find WorldGuard on this server!");
 	}
 
+	@Override
 	public boolean serverHasWorldGuard()
 	{
 		if (this.worldGuard == null)
