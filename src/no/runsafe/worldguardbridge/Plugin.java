@@ -8,7 +8,7 @@ import no.runsafe.worldguardbridge.event.RegionBorderPatrol;
 public class Plugin extends RunsafeConfigurablePlugin
 {
 	@Override
-	protected void PluginSetup()
+	protected void pluginSetup()
 	{
 		addComponent(Events.class);
 		addComponent(FrameworkHooks.class);
