@@ -21,7 +21,6 @@ import no.runsafe.framework.api.log.IConsole;
 import no.runsafe.framework.api.log.IDebug;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.internal.wrapper.ObjectUnwrapper;
-import no.runsafe.framework.minecraft.RunsafeLocation;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -166,7 +165,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		if (region == null)
 			return null;
 		BlockVector point = region.getMaximumPoint();
-		return new RunsafeLocation(world, point.getX(), point.getY(), point.getZ());
+		return world.getLocation(point.getX(), point.getY(), point.getZ());
 	}
 
 	@Override
