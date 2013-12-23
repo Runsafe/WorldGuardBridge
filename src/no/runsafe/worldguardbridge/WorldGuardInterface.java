@@ -211,7 +211,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	@Override
 	public Map<String, Rectangle2D> getRegionRectanglesInWorld(IWorld world)
 	{
-		if (world == null || worldGuard == null)
+		if (!serverHasWorldGuard() || world == null || worldGuard == null)
 			return null;
 		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world));
 		Map<String, ProtectedRegion> regionSet = regionManager.getRegions();
