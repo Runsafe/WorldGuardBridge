@@ -14,7 +14,7 @@ public class WorldGuardBridge extends RunsafeConfigurablePlugin
 		addComponent(FrameworkHooks.class);
 
 		exportAPI(getInstance(WorldGuardInterface.class));
-		this.addComponent(WorldGuardHooks.class);
-		this.addComponent(RegionBorderPatrol.class);
+		addComponent(WorldGuardHooks.class);
+		addComponent(RegionBorderPatrol.class);
 	}
 }
