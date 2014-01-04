@@ -203,6 +203,9 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	@Override
 	public List<String> getRegionsInWorld(IWorld world)
 	{
+		if (world == null)
+			return new ArrayList<String>(0);
+
 		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world));
 		return new ArrayList<String>(regionManager.getRegions().keySet());
 	}
