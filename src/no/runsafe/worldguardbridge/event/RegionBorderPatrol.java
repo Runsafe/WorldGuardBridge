@@ -3,14 +3,15 @@ package no.runsafe.worldguardbridge.event;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.IServer;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.event.IAsyncEvent;
+import no.runsafe.framework.api.event.IServerReady;
 import no.runsafe.framework.api.event.player.IPlayerMove;
 import no.runsafe.framework.api.event.player.IPlayerTeleport;
-import no.runsafe.framework.api.event.plugin.IConfigurationChanged;
+import no.runsafe.framework.api.event.world.IWorldLoad;
+import no.runsafe.framework.api.event.world.IWorldUnload;
 import no.runsafe.framework.api.log.IConsole;
 import no.runsafe.framework.api.log.IDebug;
 import no.runsafe.framework.api.player.IPlayer;
@@ -20,7 +21,7 @@ import org.bukkit.World;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurationChanged, IPlayerTeleport
+public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IServerReady, IPlayerTeleport, IWorldLoad, IWorldUnload
 {
 	public RegionBorderPatrol(IDebug output, IConsole console, IServer server)
 	{
@@ -47,7 +48,27 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 	}
 
 	@Override
-	public void OnConfigurationChanged(IConfiguration configuration)
+	public void OnServerReady()
+	{
+		ready = true;
+		flushRegions();
+	}
+
+	@Override
+	public void OnWorldLoad(IWorld world)
+	{
+		if (ready)
+			flushRegions();
+	}
+
+	@Override
+	public void OnWorldUnload(IWorld world)
+	{
+		if (ready)
+			flushRegions();
+	}
+
+	private void flushRegions()
 	{
 		int regionAmount = 0;
 		regions.clear();
@@ -118,6 +139,7 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IConfigurat
 			&& area.contains(location.getBlockX(), location.getBlockY(), location.getBlockZ());
 	}
 
+	private boolean ready = false;
 	private WorldGuardPlugin worldGuard;
 	private final ConcurrentHashMap<String, ConcurrentHashMap<String, ProtectedRegion>> regions =
 		new ConcurrentHashMap<String, ConcurrentHashMap<String, ProtectedRegion>>();

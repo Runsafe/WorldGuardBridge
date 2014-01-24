@@ -1,11 +1,11 @@
 package no.runsafe.worldguardbridge;
 
-import no.runsafe.framework.RunsafeConfigurablePlugin;
+import no.runsafe.framework.RunsafePlugin;
 import no.runsafe.framework.features.Events;
 import no.runsafe.framework.features.FrameworkHooks;
 import no.runsafe.worldguardbridge.event.RegionBorderPatrol;
 
-public class WorldGuardBridge extends RunsafeConfigurablePlugin
+public class WorldGuardBridge extends RunsafePlugin
 {
 	@Override
 	protected void pluginSetup()
