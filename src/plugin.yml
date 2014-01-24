@@ -1,5 +1,6 @@
 name: RunsafeWorldGuardBridge
 main: no.runsafe.worldguardbridge.WorldGuardBridge
 version: 1.2.@BUILD@
+softdepends: WorldGuard
 author: [Kruithne, mortenn]
 description: Bridge between Runsafe Framework and WorldGuard
