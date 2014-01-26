@@ -4,3 +4,6 @@ version: 1.2.@BUILD@
 depends: [WorldGuard]
 author: [Kruithne, mortenn]
 description: Bridge between Runsafe Framework and WorldGuard
+commands:
+  rescanwgregions:
+    description: Reload worldguard regions for region enter events
