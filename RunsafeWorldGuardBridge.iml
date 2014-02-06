@@ -10,7 +10,7 @@
     <orderEntry type="library" name="framework" level="project" />
     <orderEntry type="library" name="WorldGuard" level="project" />
     <orderEntry type="library" name="WorldEdit" level="project" />
-    <orderEntry type="library" name="craftbukkit" level="project" />
+    <orderEntry type="library" name="spigot" level="project" />
   </component>
 </module>
 
