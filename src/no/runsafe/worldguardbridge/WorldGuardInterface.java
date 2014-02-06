@@ -55,6 +55,12 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	}
 
 	@Override
+	public boolean playerCanBuildHere(IPlayer player, ILocation location)
+	{
+		return worldGuard.canBuild((Player) ObjectUnwrapper.convert(player), (Location) ObjectUnwrapper.convert(location));
+	}
+
+	@Override
 	public boolean isInPvPZone(IPlayer player)
 	{
 		if (player == null || !serverHasWorldGuard())
