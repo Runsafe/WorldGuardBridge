@@ -8,7 +8,7 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.GlobalRegionManager;
-import com.sk89q.worldguard.protection.databases.ProtectionDatabaseException;
+import com.sk89q.worldguard.protection.managers.storage.StorageException;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
@@ -247,7 +247,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		{
 			regionManager.save();
 		}
-		catch (ProtectionDatabaseException e)
+		catch (StorageException e)
 		{
 			console.logException(e);
 		}
@@ -278,7 +278,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		{
 			regionManager.save();
 		}
-		catch (ProtectionDatabaseException e)
+		catch (StorageException e)
 		{
 			console.logException(e);
 		}
@@ -328,7 +328,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 			regionManager.save();
 			return true;
 		}
-		catch (ProtectionDatabaseException e)
+		catch (StorageException e)
 		{
 			console.logException(e);
 		}
@@ -350,7 +350,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 			{
 				regionManager.save();
 			}
-			catch (ProtectionDatabaseException e)
+			catch (StorageException e)
 			{
 				console.logException(e);
 			}
@@ -374,7 +374,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 			{
 				regionManager.save();
 			}
-			catch (ProtectionDatabaseException e)
+			catch (StorageException e)
 			{
 				console.logException(e);
 			}
