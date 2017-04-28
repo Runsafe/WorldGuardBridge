@@ -184,12 +184,30 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	}
 
 	@Override
+	public Set<UUID> getOwnerUniqueIds(IWorld world, String name)
+	{
+		if (!serverHasWorldGuard())
+			return null;
+
+		return worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world)).getRegion(name).getOwners().getUniqueIds();
+	}
+
+	@Override
 	public Set<String> getMembers(IWorld world, String name)
 	{
 		if (!serverHasWorldGuard())
 			return null;
 
 		return Sets.newHashSet(worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world)).getRegion(name).getMembers().getPlayers());
+	}
+
+	@Override
+	public Set<UUID> getMemberUniqueIds(IWorld world, String name)
+	{
+		if (!serverHasWorldGuard())
+			return null;
+
+		return Sets.newHashSet(worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world)).getRegion(name).getMembers().getUniqueIds());
 	}
 
 	@Override

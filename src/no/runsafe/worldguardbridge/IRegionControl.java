@@ -9,6 +9,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 public interface IRegionControl
 {
@@ -32,7 +33,11 @@ public interface IRegionControl
 
 	Set<String> getOwners(IWorld world, String name);
 
+	Set<UUID> getOwnerUniqueIds(IWorld world, String name);
+
 	Set<String> getMembers(IWorld world, String name);
+
+	Set<UUID> getMemberUniqueIds(IWorld world, String name);
 
 	List<String> getOwnedRegions(IPlayer player, IWorld world);
 
