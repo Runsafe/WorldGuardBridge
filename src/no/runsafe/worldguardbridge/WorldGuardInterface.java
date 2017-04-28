@@ -200,8 +200,9 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world));
 		ArrayList<String> regions = new ArrayList<String>();
 		Map<String, ProtectedRegion> regionSet = regionManager.getRegions();
+		UUID playerUUID = player.getUniqueId();
 		for (String region : regionSet.keySet())
-			if (regionSet.get(region).getOwners().contains(player.getName()))
+			if (regionSet.get(region).getOwners().contains(playerUUID))
 				regions.add(region);
 		return regions;
 	}
@@ -272,7 +273,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		BlockVector min = selection.getNativeMinimumPoint().toBlockVector();
 		BlockVector max = selection.getNativeMaximumPoint().toBlockVector();
 		ProtectedRegion region = new ProtectedCuboidRegion(name, min, max);
-		region.getOwners().addPlayer(owner.getName());
+		region.getOwners().addPlayer(owner.getUniqueId());
 		regionManager.addRegion(region);
 		try
 		{
@@ -343,9 +344,9 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 
 		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world));
 		DefaultDomain members = regionManager.getRegion(name).getMembers();
-		if (!members.contains(player.getName()))
+		if (!members.contains(player.getUniqueId()))
 		{
-			members.addPlayer(player.getName());
+			members.addPlayer(player.getUniqueId());
 			try
 			{
 				regionManager.save();
@@ -367,9 +368,9 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 
 		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world));
 		DefaultDomain members = regionManager.getRegion(name).getMembers();
-		if (members.contains(player.getName()))
+		if (members.contains(player.getUniqueId()))
 		{
-			members.removePlayer(player.getName());
+			members.removePlayer(player.getUniqueId());
 			try
 			{
 				regionManager.save();
