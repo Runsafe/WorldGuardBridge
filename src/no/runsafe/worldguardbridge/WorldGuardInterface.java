@@ -246,9 +246,8 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world));
 		ArrayList<String> regions = new ArrayList<String>();
 		Map<String, ProtectedRegion> regionSet = regionManager.getRegions();
-		UUID playerUUID = player.getUniqueId();
 		for (String region : regionSet.keySet())
-			if (regionSet.get(region).getOwners().contains(playerUUID))
+			if (regionSet.get(region).getOwners().contains(player.getUniqueId()))
 				regions.add(region);
 		return regions;
 	}
