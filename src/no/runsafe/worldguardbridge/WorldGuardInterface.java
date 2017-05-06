@@ -193,6 +193,20 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	}
 
 	@Override
+	public Set<IPlayer> getOwnerPlayers(IWorld world, String name)
+	{
+		if (!serverHasWorldGuard())
+			return null;
+
+		Set<UUID> owners = getOwnerUniqueIds(world, name);
+		Set<IPlayer> ownerPlayers = new HashSet<IPlayer>();
+		for (UUID playerUUID : owners)
+			ownerPlayers.add(server.getPlayer(playerUUID));
+
+		return ownerPlayers;
+	}
+
+	@Override
 	public Set<String> getMembers(IWorld world, String name)
 	{
 		if (!serverHasWorldGuard())
@@ -208,6 +222,20 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 			return null;
 
 		return Sets.newHashSet(worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world)).getRegion(name).getMembers().getUniqueIds());
+	}
+
+	@Override
+	public Set<IPlayer> getMemberPlayers(IWorld world, String name)
+	{
+		if (!serverHasWorldGuard())
+			return null;
+
+		Set<UUID> owners = getMemberUniqueIds(world, name);
+		Set<IPlayer> memberPlayers = new HashSet<IPlayer>();
+		for (UUID playerUUID : owners)
+			memberPlayers.add(server.getPlayer(playerUUID));
+
+		return memberPlayers;
 	}
 
 	@Override

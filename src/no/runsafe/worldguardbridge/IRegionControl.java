@@ -35,9 +35,13 @@ public interface IRegionControl
 
 	Set<UUID> getOwnerUniqueIds(IWorld world, String name);
 
+	Set<IPlayer> getOwnerPlayers(IWorld world, String name);
+
 	Set<String> getMembers(IWorld world, String name);
 
 	Set<UUID> getMemberUniqueIds(IWorld world, String name);
+
+	Set<IPlayer> getMemberPlayers(IWorld world, String name);
 
 	List<String> getOwnedRegions(IPlayer player, IWorld world);
 
