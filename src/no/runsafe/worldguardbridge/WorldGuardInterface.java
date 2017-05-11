@@ -253,6 +253,20 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	}
 
 	@Override
+	public List<String> getMemberRegions(IPlayer player, IWorld world)
+	{
+		if (world == null || player == null)
+			return null;
+		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world));
+		ArrayList<String> regions = new ArrayList<String>();
+		Map<String, ProtectedRegion> regionSet = regionManager.getRegions();
+		for (String region : regionSet.keySet())
+			if (regionSet.get(region).getMembers().contains(player.getUniqueId()))
+				regions.add(region);
+		return regions;
+	}
+
+	@Override
 	public List<String> getRegionsInWorld(IWorld world)
 	{
 		if (world == null)

@@ -45,6 +45,8 @@ public interface IRegionControl
 
 	List<String> getOwnedRegions(IPlayer player, IWorld world);
 
+	List<String> getMemberRegions(IPlayer player, IWorld world);
+
 	List<String> getRegionsInWorld(IWorld world);
 
 	Map<String, Rectangle2D> getRegionRectanglesInWorld(IWorld world);
