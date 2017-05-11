@@ -27,7 +27,7 @@ public interface IRegionControl
 
 	List<String> getApplicableRegions(IPlayer player);
 
-	Map<String, Set<String>> getAllRegionsWithOwnersInWorld(IWorld world);
+	Map<String, Set<IPlayer>> getAllRegionsWithOwnersInWorld(IWorld world);
 
 	ILocation getRegionLocation(IWorld world, String name);
 

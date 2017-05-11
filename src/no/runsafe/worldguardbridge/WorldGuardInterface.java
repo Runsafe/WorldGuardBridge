@@ -151,13 +151,13 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	}
 
 	@Override
-	public Map<String, Set<String>> getAllRegionsWithOwnersInWorld(IWorld world)
+	public Map<String, Set<IPlayer>> getAllRegionsWithOwnersInWorld(IWorld world)
 	{
-		HashMap<String, Set<String>> result = new HashMap<String, Set<String>>();
+		HashMap<String, Set<IPlayer>> result = new HashMap<String, Set<IPlayer>>();
 		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world));
 		Map<String, ProtectedRegion> regions = regionManager.getRegions();
 		for (String region : regions.keySet())
-			result.put(region, regions.get(region).getOwners().getPlayers());
+			result.put(region, getOwnerPlayers(world, region));
 		return result;
 	}
 
