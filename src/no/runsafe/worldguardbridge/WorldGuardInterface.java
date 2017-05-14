@@ -151,13 +151,13 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	}
 
 	@Override
-	public Map<String, Set<String>> getAllRegionsWithOwnersInWorld(IWorld world)
+	public Map<String, Set<IPlayer>> getAllRegionsWithOwnersInWorld(IWorld world)
 	{
-		HashMap<String, Set<String>> result = new HashMap<String, Set<String>>();
+		HashMap<String, Set<IPlayer>> result = new HashMap<String, Set<IPlayer>>();
 		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world));
 		Map<String, ProtectedRegion> regions = regionManager.getRegions();
 		for (String region : regions.keySet())
-			result.put(region, regions.get(region).getOwners().getPlayers());
+			result.put(region, getOwnerPlayers(world, region));
 		return result;
 	}
 
@@ -184,12 +184,58 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	}
 
 	@Override
+	public Set<UUID> getOwnerUniqueIds(IWorld world, String name)
+	{
+		if (!serverHasWorldGuard())
+			return null;
+
+		return worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world)).getRegion(name).getOwners().getUniqueIds();
+	}
+
+	@Override
+	public Set<IPlayer> getOwnerPlayers(IWorld world, String name)
+	{
+		if (!serverHasWorldGuard())
+			return null;
+
+		Set<UUID> owners = getOwnerUniqueIds(world, name);
+		Set<IPlayer> ownerPlayers = new HashSet<IPlayer>();
+		for (UUID playerUUID : owners)
+			ownerPlayers.add(server.getPlayer(playerUUID));
+
+		return ownerPlayers;
+	}
+
+	@Override
 	public Set<String> getMembers(IWorld world, String name)
 	{
 		if (!serverHasWorldGuard())
 			return null;
 
 		return Sets.newHashSet(worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world)).getRegion(name).getMembers().getPlayers());
+	}
+
+	@Override
+	public Set<UUID> getMemberUniqueIds(IWorld world, String name)
+	{
+		if (!serverHasWorldGuard())
+			return null;
+
+		return Sets.newHashSet(worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world)).getRegion(name).getMembers().getUniqueIds());
+	}
+
+	@Override
+	public Set<IPlayer> getMemberPlayers(IWorld world, String name)
+	{
+		if (!serverHasWorldGuard())
+			return null;
+
+		Set<UUID> owners = getMemberUniqueIds(world, name);
+		Set<IPlayer> memberPlayers = new HashSet<IPlayer>();
+		for (UUID playerUUID : owners)
+			memberPlayers.add(server.getPlayer(playerUUID));
+
+		return memberPlayers;
 	}
 
 	@Override
@@ -201,7 +247,21 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		ArrayList<String> regions = new ArrayList<String>();
 		Map<String, ProtectedRegion> regionSet = regionManager.getRegions();
 		for (String region : regionSet.keySet())
-			if (regionSet.get(region).getOwners().contains(player.getName()))
+			if (regionSet.get(region).getOwners().contains(player.getUniqueId()))
+				regions.add(region);
+		return regions;
+	}
+
+	@Override
+	public List<String> getMemberRegions(IPlayer player, IWorld world)
+	{
+		if (world == null || player == null)
+			return null;
+		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world));
+		ArrayList<String> regions = new ArrayList<String>();
+		Map<String, ProtectedRegion> regionSet = regionManager.getRegions();
+		for (String region : regionSet.keySet())
+			if (regionSet.get(region).getMembers().contains(player.getUniqueId()))
 				regions.add(region);
 		return regions;
 	}
@@ -272,7 +332,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		BlockVector min = selection.getNativeMinimumPoint().toBlockVector();
 		BlockVector max = selection.getNativeMaximumPoint().toBlockVector();
 		ProtectedRegion region = new ProtectedCuboidRegion(name, min, max);
-		region.getOwners().addPlayer(owner.getName());
+		region.getOwners().addPlayer(owner.getUniqueId());
 		regionManager.addRegion(region);
 		try
 		{
@@ -343,9 +403,9 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 
 		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world));
 		DefaultDomain members = regionManager.getRegion(name).getMembers();
-		if (!members.contains(player.getName()))
+		if (!members.contains(player.getUniqueId()))
 		{
-			members.addPlayer(player.getName());
+			members.addPlayer(player.getUniqueId());
 			try
 			{
 				regionManager.save();
@@ -367,9 +427,9 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 
 		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world));
 		DefaultDomain members = regionManager.getRegion(name).getMembers();
-		if (members.contains(player.getName()))
+		if (members.contains(player.getUniqueId()))
 		{
-			members.removePlayer(player.getName());
+			members.removePlayer(player.getUniqueId());
 			try
 			{
 				regionManager.save();
