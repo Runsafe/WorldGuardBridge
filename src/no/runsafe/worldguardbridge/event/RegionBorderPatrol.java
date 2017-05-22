@@ -41,8 +41,8 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IServerRead
 	{
 		if (serverHasWorldGuard())
 		{
-			CheckIfEnteringRegion(player, from, to);
 			CheckIfLeavingRegion(player, from, to);
+			CheckIfEnteringRegion(player, from, to);
 		}
 		return true;
 	}

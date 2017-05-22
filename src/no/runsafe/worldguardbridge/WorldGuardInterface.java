@@ -141,7 +141,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(player.getWorld()));
 		ApplicableRegionSet set = regionManager.getApplicableRegions((Location) ObjectUnwrapper.convert(player.getLocation()));
 		if (set.size() == 0)
-			return null;
+			return Collections.emptyList();
 
 		ArrayList<String> regions = new ArrayList<String>();
 		for (ProtectedRegion r : set)
@@ -150,6 +150,12 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		return regions;
 	}
 
+	/**
+	 * Gets a list of all regions in a world with owners.
+	 * Will not return owners that haven't been converted from being stored as usernames to UUIDs.
+	 * @param world The world.
+	 * @return Every region name with a set of its owners.
+	 */
 	@Override
 	public Map<String, Set<IPlayer>> getAllRegionsWithOwnersInWorld(IWorld world)
 	{
@@ -174,6 +180,14 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		return world.getLocation(point.getX(), point.getY(), point.getZ());
 	}
 
+	/**
+	 * Gets a list of plot owner names world guard has stored.
+	 * If the player is stored by UUID then their username will not be stored.
+	 * Players who have been converted from being stored as user names to UUIDs will not be returned.
+	 * @param world The world the region is in.
+	 * @param name Textual identifier of what the region is called.
+	 * @return List of owner names.
+	 */
 	@Override
 	public Set<String> getOwners(IWorld world, String name)
 	{
@@ -183,6 +197,14 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		return worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world)).getRegion(name).getOwners().getPlayers();
 	}
 
+	/**
+	 * Gets a list of plot owner unique IDs world guard has stored.
+	 * If the player is stored by their username they will not have a UUID stored.
+	 * Players who have not been converted from being stored by their user names to UUIDs will not be returned.
+	 * @param world The world the region is in.
+	 * @param name Textual identifier of what the region is called.
+	 * @return List of owner unique IDs.
+	 */
 	@Override
 	public Set<UUID> getOwnerUniqueIds(IWorld world, String name)
 	{
@@ -192,6 +214,13 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		return worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world)).getRegion(name).getOwners().getUniqueIds();
 	}
 
+	/**
+	 * Gets a list of plot owners in the form of IPlayers.
+	 * The player objects are created from the UUIDs from the getOwnerUniqueIds method.
+	 * @param world The world the region is in.
+	 * @param name Textual identifier of what the region is called.
+	 * @return List of plot owners.
+	 */
 	@Override
 	public Set<IPlayer> getOwnerPlayers(IWorld world, String name)
 	{
@@ -206,6 +235,14 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		return ownerPlayers;
 	}
 
+	/**
+	 * Gets a list of plot member names world guard has stored.
+	 * If the player is stored by UUID then their username will not be stored.
+	 * Players who have been converted from being stored as user names to UUIDs will not be returned.
+	 * @param world The world the region is in.
+	 * @param name Textual identifier of what the region is called.
+	 * @return List of member names.
+	 */
 	@Override
 	public Set<String> getMembers(IWorld world, String name)
 	{
@@ -215,6 +252,14 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		return Sets.newHashSet(worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world)).getRegion(name).getMembers().getPlayers());
 	}
 
+	/**
+	 * Gets a list of plot member unique IDs world guard has stored.
+	 * If the player is stored by their username they will not have a UUID stored.
+	 * Players who have not been converted from being stored by their user names to UUIDs will not be returned.
+	 * @param world The world the region is in.
+	 * @param name Textual identifier of what the region is called.
+	 * @return List of member unique IDs.
+	 */
 	@Override
 	public Set<UUID> getMemberUniqueIds(IWorld world, String name)
 	{
@@ -224,6 +269,13 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		return Sets.newHashSet(worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world)).getRegion(name).getMembers().getUniqueIds());
 	}
 
+	/**
+	 * Gets a list of plot members in the form of IPlayers.
+	 * The player objects are created from the UUIDs from the getMemberUniqueIds method.
+	 * @param world The world the region is in.
+	 * @param name Textual identifier of what the region is called.
+	 * @return List of plot members.
+	 */
 	@Override
 	public Set<IPlayer> getMemberPlayers(IWorld world, String name)
 	{
