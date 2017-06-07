@@ -449,7 +449,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		if (members.contains(player.getUniqueId()))
 		{
 			members.removePlayer(player.getUniqueId());
-			return saveRegionManager(regionManager);
+			return this.saveRegionManager(regionManager);
 		}
 		return false;
 	}
