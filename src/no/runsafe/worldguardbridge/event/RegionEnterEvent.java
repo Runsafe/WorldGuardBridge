@@ -29,7 +29,7 @@ public class RegionEnterEvent extends RunsafeCustomEvent
 	@Override
 	public Map<String, String> getData()
 	{
-		Map<String, String> data = new HashMap<String, String>();
+		Map<String, String> data = new HashMap<>();
 		data.put("world", world.getName());
 		data.put("region", region);
 		return data;

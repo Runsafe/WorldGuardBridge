@@ -103,7 +103,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	public List<IPlayer> getPlayersInRegion(IWorld world, String regionName)
 	{
 		List<IPlayer> worldPlayers = world.getPlayers();
-		List<IPlayer> regionPlayers = new ArrayList<IPlayer>();
+		List<IPlayer> regionPlayers = new ArrayList<>();
 
 		for (IPlayer player : worldPlayers)
 		{
@@ -127,7 +127,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		if (set.size() == 0)
 			return null;
 
-		ArrayList<String> regions = new ArrayList<String>();
+		ArrayList<String> regions = new ArrayList<>();
 		for (ProtectedRegion region : set)
 			regions.add(region.getId());
 
@@ -142,7 +142,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		if (set.size() == 0)
 			return Collections.emptyList();
 
-		ArrayList<String> regions = new ArrayList<String>();
+		ArrayList<String> regions = new ArrayList<>();
 		for (ProtectedRegion r : set)
 			regions.add(r.getId());
 
@@ -158,7 +158,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	@Override
 	public Map<String, Set<IPlayer>> getAllRegionsWithOwnersInWorld(IWorld world)
 	{
-		HashMap<String, Set<IPlayer>> result = new HashMap<String, Set<IPlayer>>();
+		HashMap<String, Set<IPlayer>> result = new HashMap<>();
 		RegionManager regionManager = worldGuard.getRegionManager(ObjectUnwrapper.convert(world));
 		Map<String, ProtectedRegion> regions = regionManager.getRegions();
 		for (String region : regions.keySet())
@@ -227,7 +227,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 			return null;
 
 		Set<UUID> owners = getOwnerUniqueIds(world, name);
-		Set<IPlayer> ownerPlayers = new HashSet<IPlayer>();
+		Set<IPlayer> ownerPlayers = new HashSet<>();
 		for (UUID playerUUID : owners)
 			ownerPlayers.add(server.getPlayer(playerUUID));
 
@@ -282,7 +282,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 			return null;
 
 		Set<UUID> owners = getMemberUniqueIds(world, name);
-		Set<IPlayer> memberPlayers = new HashSet<IPlayer>();
+		Set<IPlayer> memberPlayers = new HashSet<>();
 		for (UUID playerUUID : owners)
 			memberPlayers.add(server.getPlayer(playerUUID));
 
@@ -295,7 +295,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		if (world == null || player == null)
 			return null;
 		RegionManager regionManager = worldGuard.getRegionManager(ObjectUnwrapper.convert(world));
-		ArrayList<String> regions = new ArrayList<String>();
+		ArrayList<String> regions = new ArrayList<>();
 		Map<String, ProtectedRegion> regionSet = regionManager.getRegions();
 		for (String region : regionSet.keySet())
 			if (regionSet.get(region).getOwners().contains(player.getUniqueId()))
@@ -309,7 +309,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		if (world == null || player == null)
 			return null;
 		RegionManager regionManager = worldGuard.getRegionManager(ObjectUnwrapper.convert(world));
-		ArrayList<String> regions = new ArrayList<String>();
+		ArrayList<String> regions = new ArrayList<>();
 		Map<String, ProtectedRegion> regionSet = regionManager.getRegions();
 		for (String region : regionSet.keySet())
 			if (regionSet.get(region).getMembers().contains(player.getUniqueId()))
@@ -321,10 +321,10 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	public List<String> getRegionsInWorld(IWorld world)
 	{
 		if (world == null)
-			return new ArrayList<String>(0);
+			return new ArrayList<>(0);
 
 		RegionManager regionManager = worldGuard.getRegionManager(ObjectUnwrapper.convert(world));
-		return new ArrayList<String>(regionManager.getRegions().keySet());
+		return new ArrayList<>(regionManager.getRegions().keySet());
 	}
 
 	@Override
@@ -334,7 +334,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 			return null;
 		RegionManager regionManager = worldGuard.getRegionManager(ObjectUnwrapper.convert(world));
 		Map<String, ProtectedRegion> regionSet = regionManager.getRegions();
-		HashMap<String, Rectangle2D> result = new HashMap<String, Rectangle2D>();
+		HashMap<String, Rectangle2D> result = new HashMap<>();
 		for (String regionName : regionSet.keySet())
 		{
 			Rectangle2D.Double area = new Rectangle2D.Double();

@@ -76,7 +76,7 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IServerRead
 		for (IWorld world : server.getWorlds())
 		{
 			if (!regions.containsKey(world.getName()))
-				regions.putIfAbsent(world.getName(), new ConcurrentHashMap<String, ProtectedRegion>());
+				regions.putIfAbsent(world.getName(), new ConcurrentHashMap<>());
 
 			ConcurrentHashMap<String, ProtectedRegion> worldRegions = regions.get(world.getName());
 			RegionManager manager = worldGuard.getRegionManager(ObjectUnwrapper.convert(world));
@@ -141,7 +141,7 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IServerRead
 	private boolean ready = false;
 	private WorldGuardPlugin worldGuard;
 	private final ConcurrentHashMap<String, ConcurrentHashMap<String, ProtectedRegion>> regions =
-		new ConcurrentHashMap<String, ConcurrentHashMap<String, ProtectedRegion>>();
+		new ConcurrentHashMap<>();
 	private final IDebug debugger;
 	private final IConsole console;
 	private final IServer server;
