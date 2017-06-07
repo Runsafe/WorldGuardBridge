@@ -355,15 +355,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		if (regionManager.getRegion(name) == null)
 			return false;
 		regionManager.removeRegion(name);
-		try
-		{
-			regionManager.save();
-		}
-		catch (StorageException e)
-		{
-			console.logException(e);
-		}
-		return true;
+		return this.saveRegionManager(regionManager);
 	}
 
 	@Override
@@ -386,14 +378,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		ProtectedRegion region = new ProtectedCuboidRegion(name, min, max);
 		region.getOwners().addPlayer(owner.getUniqueId());
 		regionManager.addRegion(region);
-		try
-		{
-			regionManager.save();
-		}
-		catch (StorageException e)
-		{
-			console.logException(e);
-		}
+		this.saveRegionManager(regionManager);
 		return regionManager.hasRegion(name);
 	}
 
@@ -435,16 +420,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		}
 
 		regionManager.addRegion(region); // Replace region
-		try
-		{
-			regionManager.save();
-			return true;
-		}
-		catch (StorageException e)
-		{
-			console.logException(e);
-		}
-		return false;
+		return this.saveRegionManager(regionManager);
 	}
 
 	@Override
@@ -458,15 +434,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		if (!members.contains(player.getUniqueId()))
 		{
 			members.addPlayer(player.getUniqueId());
-			try
-			{
-				regionManager.save();
-			}
-			catch (StorageException e)
-			{
-				console.logException(e);
-			}
-			return true;
+			return this.saveRegionManager(regionManager);
 		}
 		return false;
 	}
@@ -482,15 +450,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		if (members.contains(player.getUniqueId()))
 		{
 			members.removePlayer(player.getUniqueId());
-			try
-			{
-				regionManager.save();
-			}
-			catch (StorageException e)
-			{
-				console.logException(e);
-			}
-			return true;
+			return saveRegionManager(regionManager);
 		}
 		return false;
 	}
@@ -508,6 +468,26 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		BlockVector max = region.getMaximumPoint();
 		area.setRect(min.getX(), min.getZ(), max.getX() - min.getX(), max.getZ() - min.getZ());
 		return area;
+	}
+
+	/**
+	 * Saves the region manager.
+	 * Catches any StorageExceptions it might throw and outputs them to the console.
+	 * @param regionManager Thing to save.
+	 * @return True if successful, false if unsuccessful.
+	 */
+	private boolean saveRegionManager(RegionManager regionManager)
+	{
+		try
+		{
+			regionManager.save();
+			return true;
+		}
+		catch (StorageException e)
+		{
+			console.logException(e);
+			return false;
+		}
 	}
 
 	GlobalRegionManager getGlobalRegionManager()
