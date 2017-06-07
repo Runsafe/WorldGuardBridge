@@ -16,7 +16,6 @@ import no.runsafe.framework.api.log.IConsole;
 import no.runsafe.framework.api.log.IDebug;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.internal.wrapper.ObjectUnwrapper;
-import org.bukkit.World;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -80,7 +79,7 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IServerRead
 				regions.putIfAbsent(world.getName(), new ConcurrentHashMap<String, ProtectedRegion>());
 
 			ConcurrentHashMap<String, ProtectedRegion> worldRegions = regions.get(world.getName());
-			RegionManager manager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world));
+			RegionManager manager = worldGuard.getRegionManager(ObjectUnwrapper.convert(world));
 			Map<String, ProtectedRegion> regions = manager.getRegions();
 
 			for (String region : regions.keySet())

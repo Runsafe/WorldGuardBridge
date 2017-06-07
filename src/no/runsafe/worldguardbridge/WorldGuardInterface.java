@@ -22,7 +22,6 @@ import no.runsafe.framework.api.log.IDebug;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.internal.wrapper.ObjectUnwrapper;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.awt.geom.Rectangle2D;
@@ -57,7 +56,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	@Override
 	public boolean playerCanBuildHere(IPlayer player, ILocation location)
 	{
-		return worldGuard.canBuild((Player) ObjectUnwrapper.convert(player), (Location) ObjectUnwrapper.convert(location));
+		return worldGuard.canBuild(ObjectUnwrapper.convert(player), (Location) ObjectUnwrapper.convert(location));
 	}
 
 	@Override
@@ -65,7 +64,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	{
 		if (player == null || !serverHasWorldGuard())
 			return false;
-		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(player.getWorld()));
+		RegionManager regionManager = worldGuard.getRegionManager(ObjectUnwrapper.convert(player.getWorld()));
 		ApplicableRegionSet set = regionManager.getApplicableRegions((Location) ObjectUnwrapper.convert(player.getLocation()));
 		return set.size() != 0 && set.allows(DefaultFlag.PVP);
 	}
@@ -73,7 +72,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	@Override
 	public String getCurrentRegion(IPlayer player)
 	{
-		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(player.getWorld()));
+		RegionManager regionManager = worldGuard.getRegionManager(ObjectUnwrapper.convert(player.getWorld()));
 		ApplicableRegionSet set = regionManager.getApplicableRegions((Location) ObjectUnwrapper.convert(player.getLocation()));
 		if (set.size() == 0)
 			return null;
@@ -94,7 +93,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 			return null;
 		if (world == null)
 			return null;
-		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world));
+		RegionManager regionManager = worldGuard.getRegionManager(ObjectUnwrapper.convert(world));
 		if (regionManager == null)
 			return null;
 		return regionManager.getRegion(name);
@@ -122,7 +121,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		if (!serverHasWorldGuard())
 			return null;
 
-		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(location.getWorld()));
+		RegionManager regionManager = worldGuard.getRegionManager(ObjectUnwrapper.convert(location.getWorld()));
 		ApplicableRegionSet set = regionManager.getApplicableRegions((Location) ObjectUnwrapper.convert(location));
 
 		if (set.size() == 0)
@@ -138,7 +137,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	@Override
 	public List<String> getApplicableRegions(IPlayer player)
 	{
-		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(player.getWorld()));
+		RegionManager regionManager = worldGuard.getRegionManager(ObjectUnwrapper.convert(player.getWorld()));
 		ApplicableRegionSet set = regionManager.getApplicableRegions((Location) ObjectUnwrapper.convert(player.getLocation()));
 		if (set.size() == 0)
 			return Collections.emptyList();
@@ -160,7 +159,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	public Map<String, Set<IPlayer>> getAllRegionsWithOwnersInWorld(IWorld world)
 	{
 		HashMap<String, Set<IPlayer>> result = new HashMap<String, Set<IPlayer>>();
-		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world));
+		RegionManager regionManager = worldGuard.getRegionManager(ObjectUnwrapper.convert(world));
 		Map<String, ProtectedRegion> regions = regionManager.getRegions();
 		for (String region : regions.keySet())
 			result.put(region, getOwnerPlayers(world, region));
@@ -173,7 +172,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		if (!serverHasWorldGuard())
 			return null;
 
-		ProtectedRegion region = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world)).getRegion(name);
+		ProtectedRegion region = worldGuard.getRegionManager(ObjectUnwrapper.convert(world)).getRegion(name);
 		if (region == null)
 			return null;
 		BlockVector point = region.getMaximumPoint();
@@ -194,7 +193,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		if (!serverHasWorldGuard())
 			return null;
 
-		return worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world)).getRegion(name).getOwners().getPlayers();
+		return worldGuard.getRegionManager(ObjectUnwrapper.convert(world)).getRegion(name).getOwners().getPlayers();
 	}
 
 	/**
@@ -211,7 +210,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		if (!serverHasWorldGuard())
 			return null;
 
-		return worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world)).getRegion(name).getOwners().getUniqueIds();
+		return worldGuard.getRegionManager(ObjectUnwrapper.convert(world)).getRegion(name).getOwners().getUniqueIds();
 	}
 
 	/**
@@ -249,7 +248,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		if (!serverHasWorldGuard())
 			return null;
 
-		return Sets.newHashSet(worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world)).getRegion(name).getMembers().getPlayers());
+		return Sets.newHashSet(worldGuard.getRegionManager(ObjectUnwrapper.convert(world)).getRegion(name).getMembers().getPlayers());
 	}
 
 	/**
@@ -266,7 +265,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		if (!serverHasWorldGuard())
 			return null;
 
-		return Sets.newHashSet(worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world)).getRegion(name).getMembers().getUniqueIds());
+		return Sets.newHashSet(worldGuard.getRegionManager(ObjectUnwrapper.convert(world)).getRegion(name).getMembers().getUniqueIds());
 	}
 
 	/**
@@ -295,7 +294,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	{
 		if (world == null || player == null)
 			return null;
-		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world));
+		RegionManager regionManager = worldGuard.getRegionManager(ObjectUnwrapper.convert(world));
 		ArrayList<String> regions = new ArrayList<String>();
 		Map<String, ProtectedRegion> regionSet = regionManager.getRegions();
 		for (String region : regionSet.keySet())
@@ -309,7 +308,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	{
 		if (world == null || player == null)
 			return null;
-		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world));
+		RegionManager regionManager = worldGuard.getRegionManager(ObjectUnwrapper.convert(world));
 		ArrayList<String> regions = new ArrayList<String>();
 		Map<String, ProtectedRegion> regionSet = regionManager.getRegions();
 		for (String region : regionSet.keySet())
@@ -324,7 +323,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		if (world == null)
 			return new ArrayList<String>(0);
 
-		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world));
+		RegionManager regionManager = worldGuard.getRegionManager(ObjectUnwrapper.convert(world));
 		return new ArrayList<String>(regionManager.getRegions().keySet());
 	}
 
@@ -333,7 +332,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	{
 		if (!serverHasWorldGuard() || world == null || worldGuard == null)
 			return null;
-		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world));
+		RegionManager regionManager = worldGuard.getRegionManager(ObjectUnwrapper.convert(world));
 		Map<String, ProtectedRegion> regionSet = regionManager.getRegions();
 		HashMap<String, Rectangle2D> result = new HashMap<String, Rectangle2D>();
 		for (String regionName : regionSet.keySet())
@@ -351,7 +350,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	@Override
 	public boolean deleteRegion(IWorld world, String name)
 	{
-		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world));
+		RegionManager regionManager = worldGuard.getRegionManager(ObjectUnwrapper.convert(world));
 		if (regionManager.getRegion(name) == null)
 			return false;
 		regionManager.removeRegion(name);
@@ -364,13 +363,13 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		if (world == null || worldGuard == null)
 			return false;
 
-		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world));
+		RegionManager regionManager = worldGuard.getRegionManager(ObjectUnwrapper.convert(world));
 		if (regionManager.hasRegion(name))
 			return false;
 
 		CuboidSelection selection = new CuboidSelection(
-			(World) ObjectUnwrapper.convert(world),
-			(Location) ObjectUnwrapper.convert(pos1),
+			ObjectUnwrapper.convert(world),
+			ObjectUnwrapper.convert(pos1),
 			(Location) ObjectUnwrapper.convert(pos2)
 		);
 		BlockVector min = selection.getNativeMinimumPoint().toBlockVector();
@@ -388,7 +387,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		if (world == null || worldGuard == null)
 			return false;
 
-		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world));
+		RegionManager regionManager = worldGuard.getRegionManager(ObjectUnwrapper.convert(world));
 		ProtectedRegion existing = regionManager.getRegion(name);
 		if (existing == null)
 		{
@@ -396,8 +395,8 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 			return false;
 		}
 		CuboidSelection selection = new CuboidSelection(
-			(World) ObjectUnwrapper.convert(world),
-			(Location) ObjectUnwrapper.convert(pos1),
+			ObjectUnwrapper.convert(world),
+			ObjectUnwrapper.convert(pos1),
 			(Location) ObjectUnwrapper.convert(pos2)
 		);
 		BlockVector min = selection.getNativeMinimumPoint().toBlockVector();
@@ -429,7 +428,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		if (!serverHasWorldGuard())
 			return false;
 
-		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world));
+		RegionManager regionManager = worldGuard.getRegionManager(ObjectUnwrapper.convert(world));
 		DefaultDomain members = regionManager.getRegion(name).getMembers();
 		if (!members.contains(player.getUniqueId()))
 		{
@@ -445,7 +444,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 		if (!serverHasWorldGuard())
 			return false;
 
-		RegionManager regionManager = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world));
+		RegionManager regionManager = worldGuard.getRegionManager(ObjectUnwrapper.convert(world));
 		DefaultDomain members = regionManager.getRegion(name).getMembers();
 		if (members.contains(player.getUniqueId()))
 		{
@@ -460,7 +459,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	{
 		if (!serverHasWorldGuard())
 			return null;
-		ProtectedRegion region = worldGuard.getRegionManager((World) ObjectUnwrapper.convert(world)).getRegion(name);
+		ProtectedRegion region = worldGuard.getRegionManager(ObjectUnwrapper.convert(world)).getRegion(name);
 		if (region == null)
 			return null;
 		Rectangle2D.Double area = new Rectangle2D.Double();
