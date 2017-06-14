@@ -10,8 +10,6 @@ import no.runsafe.framework.api.hook.IPlayerPvPFlag;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.internal.wrapper.ObjectUnwrapper;
 import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
 
 public class WorldGuardHooks implements IPlayerBuildPermission, IPlayerPvPFlag
 {
@@ -26,7 +24,7 @@ public class WorldGuardHooks implements IPlayerBuildPermission, IPlayerPvPFlag
 	{
 		return worldGuard.serverHasWorldGuard()
 			&& !worldGuard.getGlobalRegionManager()
-			.canBuild((Player) ObjectUnwrapper.convert(player), (Location) ObjectUnwrapper.convert(location));
+			.canBuild(ObjectUnwrapper.convert(player), (Location) ObjectUnwrapper.convert(location));
 	}
 
 	@Override
@@ -35,11 +33,11 @@ public class WorldGuardHooks implements IPlayerBuildPermission, IPlayerPvPFlag
 		if (!worldGuard.serverHasWorldGuard())
 			return false;
 
-		RegionManager manager = worldGuard.getGlobalRegionManager().get((World) ObjectUnwrapper.convert(player.getWorld()));
+		RegionManager manager = worldGuard.getGlobalRegionManager().get(ObjectUnwrapper.convert(player.getWorld()));
 		ILocation playerLocation = player.getLocation();
 		BlockVector location = new BlockVector(playerLocation.getX(), playerLocation.getY(), playerLocation.getZ());
 		ApplicableRegionSet applicable = manager.getApplicableRegions(location);
-		return !applicable.allows(DefaultFlag.PVP, worldGuard.wrapPlayer((Player) ObjectUnwrapper.convert(player)));
+		return !applicable.allows(DefaultFlag.PVP, worldGuard.wrapPlayer( ObjectUnwrapper.convert(player)));
 	}
 
 	private final WorldGuardInterface worldGuard;
