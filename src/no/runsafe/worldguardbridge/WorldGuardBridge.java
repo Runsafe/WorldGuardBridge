@@ -4,7 +4,7 @@ import no.runsafe.framework.RunsafePlugin;
 import no.runsafe.framework.features.Commands;
 import no.runsafe.framework.features.Events;
 import no.runsafe.framework.features.FrameworkHooks;
-import no.runsafe.worldguardbridge.command.RescanRegions;
+import no.runsafe.worldguardbridge.command.*;
 import no.runsafe.worldguardbridge.event.RegionBorderPatrol;
 
 public class WorldGuardBridge extends RunsafePlugin
@@ -20,5 +20,6 @@ public class WorldGuardBridge extends RunsafePlugin
 		addComponent(WorldGuardHooks.class);
 		addComponent(RegionBorderPatrol.class);
 		addComponent(RescanRegions.class);
+		addComponent(UpdateRegionUUIDs.class);
 	}
 }

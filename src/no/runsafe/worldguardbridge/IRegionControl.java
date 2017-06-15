@@ -64,4 +64,6 @@ public interface IRegionControl
 	Rectangle2D getRectangle(IWorld world, String name);
 
 	boolean playerCanBuildHere(IPlayer player, ILocation location);
+
+	void updateUUIDs();
 }
