@@ -470,6 +470,98 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	}
 
 	/**
+	 * Converts usernames to UUIDs in every loaded region.
+	 * Outputs results to the console.
+	 *
+	 * Should be removed once all UUIDs are updated.
+	 */
+	public void updateUUIDs()
+	{
+		if (!serverHasWorldGuard())
+			return;
+
+		console.logInformation("Updating player Unique IDs for regions in all loaded worlds.");
+
+		// Loop through every loaded world.
+		for (IWorld world : server.getWorlds())
+		{
+			String worldName = world.getName();
+			console.logInformation("Updating world: " + worldName);
+			RegionManager regionManager = worldGuard.getRegionManager(ObjectUnwrapper.convert(world));
+
+			// Make sure there are regions in this world before proceeding.
+			Map<String, ProtectedRegion> regions = regionManager.getRegions();
+			if (regions.isEmpty())
+				continue;
+
+			// Loop through regions in a world
+			for (String regionName : regions.keySet())
+			{
+				// Get region and make sure it's valid
+				ProtectedRegion regionObject = regionManager.getRegion(regionName);
+				if (regionObject == null)
+				{
+					console.logWarning("Invalid region %s in world %s. ", regionName, worldName);
+					continue;
+				}
+
+				// Convert Owners
+				DefaultDomain regionOwners = regionObject.getOwners();
+				if (regionOwners.size() > 0)
+					updateRegionMembers(regionOwners, regionName);
+
+				// Convert Members
+				DefaultDomain regionMembers = regionObject.getMembers();
+				if (regionMembers.size() > 0)
+					updateRegionMembers(regionMembers, regionName);
+			}
+
+			// Save changes for the world.
+			if (this.saveRegionManager(regionManager))
+				console.logInformation("Saving region changes for world: " + world);
+			else
+				console.logError("Changes for world %s could not be saved.", world);
+		}
+
+		console.logInformation("Updating player Unique IDs complete.");
+	}
+
+	/**
+	 * Converts member/owner names to UUID.
+	 * Intended to be used with the updateUUIDs method.
+	 * WARNING: Does not save changes, save regionManager after using this method.
+	 * @param regionPlayers Domain of members or owners to convert.
+	 * @param regionName Name of the region the region players are from.
+	 *                   Only used to output information to the console.
+	 *
+	 * Should be removed once all UUIDs are updated.
+	 */
+	private void updateRegionMembers(DefaultDomain regionPlayers, String regionName)
+	{
+		for (String playerName : regionPlayers.getPlayers())
+		{
+			UUID playerID = server.getUniqueId(playerName);
+			if (playerID != null)
+			{
+				// Remove player name
+				regionPlayers.removePlayer(playerName);
+				// Set player ID
+				regionPlayers.addPlayer(playerID);
+				// Output information
+				console.logInformation(
+					"Region player %s updated with UUID %s for region %s.",
+					playerName, playerID, regionName
+				);
+			}
+			else
+				console.logWarning(
+					"Player %s for region %s could not be updated.",
+					playerName, regionName
+				);
+		}
+	}
+
+	/**
 	 * Saves the region manager.
 	 * Catches any StorageExceptions it might throw and outputs them to the console.
 	 * @param regionManager Thing to save.
