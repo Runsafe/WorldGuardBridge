@@ -63,8 +63,19 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IServerRead
 	@Override
 	public void OnWorldUnload(IWorld world)
 	{
-		if (ready)
-			flushRegions();
+		if (!ready || !serverHasWorldGuard())
+			return;
+		String worldName = world.getName();
+
+		// Check if world isn't loaded. Can't unload a world if it's not loaded.
+		if (!regions.containsKey(worldName))
+		{
+			console.logWarning("&eCould not unload regions for world &6%s&e. No regions to unload.", worldName);
+			return;
+		}
+
+		regions.remove(worldName);
+		console.logInformation("&2Unloaded all regions in world &a%s&2.", worldName);
 	}
 
 	private void flushRegions()
