@@ -49,8 +49,8 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IServerRead
 	@Override
 	public void OnServerReady()
 	{
-		ready = true;
 		flushRegions();
+		ready = true;
 	}
 
 	@Override
