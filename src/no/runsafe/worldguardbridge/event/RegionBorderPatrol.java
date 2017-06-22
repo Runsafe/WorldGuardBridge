@@ -49,47 +49,78 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IServerRead
 	@Override
 	public void OnServerReady()
 	{
-		ready = true;
 		flushRegions();
+		ready = true;
 	}
 
 	@Override
 	public void OnWorldLoad(IWorld world)
 	{
-		if (ready)
-			flushRegions();
+		if (!ready || !serverHasWorldGuard())
+			return;
+		loadWorldRegions(world);
 	}
 
 	@Override
 	public void OnWorldUnload(IWorld world)
 	{
-		if (ready)
-			flushRegions();
+		if (!ready || !serverHasWorldGuard())
+			return;
+		String worldName = world.getName();
+
+		// Check if world isn't loaded. Can't unload a world if it's not loaded.
+		if (!regions.containsKey(worldName))
+		{
+			console.logWarning("&eCould not unload regions for world &6%s&e. No regions to unload.", worldName);
+			return;
+		}
+
+		regions.remove(worldName);
+		console.logInformation("&2Unloaded all regions in world &a%s&2.", worldName);
 	}
 
 	private void flushRegions()
 	{
-		int regionAmount = 0;
 		regions.clear();
 		if (!serverHasWorldGuard())
 			return;
+		int regionAmount = 0;
 		for (IWorld world : server.getWorlds())
-		{
-			if (!regions.containsKey(world.getName()))
-				regions.putIfAbsent(world.getName(), new ConcurrentHashMap<>());
-
-			ConcurrentHashMap<String, ProtectedRegion> worldRegions = regions.get(world.getName());
-			RegionManager manager = worldGuard.getRegionManager(ObjectUnwrapper.convert(world));
-			Map<String, ProtectedRegion> regions = manager.getRegions();
-
-			for (String region : regions.keySet())
-			{
-				regionAmount += 1;
-				worldRegions.putIfAbsent(region, regions.get(region));
-			}
-			console.logInformation("&2Loaded &a%d&2 regions in world &a%s&2.&r", worldRegions.size(), world.getName());
-		}
+			regionAmount += loadWorldRegions(world);
 		console.logInformation("&2Loaded &a%d&2 regions across &a%d&2 worlds.&r", regionAmount, regions.size());
+	}
+
+	/**
+	 * Loads all regions in a world.
+	 * Outputs the number of regions loaded for the world to the console.
+	 * If the world's regions are already loaded, it unloads then reloads them.
+	 *
+	 * @param world World to load regions for.
+	 * @return Number of regions loaded.
+	 */
+	private int loadWorldRegions(IWorld world)
+	{
+		int regionAmount = 0;
+		String worldName = world.getName();
+		ConcurrentHashMap<String, ProtectedRegion> worldRegions = regions.get(worldName);
+
+		if (worldRegions != null)
+			worldRegions.clear();
+		else
+		{
+			worldRegions = new ConcurrentHashMap<>();
+			regions.putIfAbsent(worldName, worldRegions);
+		}
+
+		Map<String, ProtectedRegion> regions = worldGuard.getRegionManager(ObjectUnwrapper.convert(world)).getRegions();
+		for (String region : regions.keySet())
+		{
+			regionAmount++;
+			worldRegions.putIfAbsent(region, regions.get(region));
+		}
+		console.logInformation("&2Loaded &a%d&2 regions in world &a%s&2.&r", regionAmount, worldName);
+
+		return regionAmount;
 	}
 
 	private boolean serverHasWorldGuard()

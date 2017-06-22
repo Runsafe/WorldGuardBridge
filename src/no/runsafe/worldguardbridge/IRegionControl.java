@@ -61,6 +61,10 @@ public interface IRegionControl
 
 	boolean removeMemberFromRegion(IWorld world, String name, IPlayer player);
 
+	boolean addOwnerToRegion(IWorld world, String name, IPlayer player);
+
+	boolean removeOwnerFromRegion(IWorld world, String name, IPlayer player);
+
 	Rectangle2D getRectangle(IWorld world, String name);
 
 	boolean playerCanBuildHere(IPlayer player, ILocation location);

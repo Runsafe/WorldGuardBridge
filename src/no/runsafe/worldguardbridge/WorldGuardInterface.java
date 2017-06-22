@@ -455,6 +455,38 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	}
 
 	@Override
+	public boolean addOwnerToRegion(IWorld world, String name, IPlayer player)
+	{
+		if (!serverHasWorldGuard())
+			return false;
+
+		RegionManager regionManager = worldGuard.getRegionManager(ObjectUnwrapper.convert(world));
+		DefaultDomain owners = regionManager.getRegion(name).getOwners();
+		if (!owners.contains(player.getUniqueId()))
+		{
+			owners.addPlayer(player.getUniqueId());
+			return this.saveRegionManager(regionManager);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean removeOwnerFromRegion(IWorld world, String name, IPlayer player)
+	{
+		if (!serverHasWorldGuard())
+			return false;
+
+		RegionManager regionManager = worldGuard.getRegionManager(ObjectUnwrapper.convert(world));
+		DefaultDomain owners = regionManager.getRegion(name).getOwners();
+		if (owners.contains(player.getUniqueId()))
+		{
+			owners.removePlayer(player.getUniqueId());
+			return this.saveRegionManager(regionManager);
+		}
+		return false;
+	}
+
+	@Override
 	public Rectangle2D getRectangle(IWorld world, String name)
 	{
 		if (!serverHasWorldGuard())
