@@ -20,6 +20,5 @@ public class WorldGuardBridge extends RunsafePlugin
 		addComponent(WorldGuardHooks.class);
 		addComponent(RegionBorderPatrol.class);
 		addComponent(RescanRegions.class);
-		addComponent(UpdateRegionUUIDs.class);
 	}
 }
