@@ -7,5 +7,3 @@ description: Bridge between Runsafe Framework and WorldGuard
 commands:
   rescanwgregions:
     description: Reload worldguard regions for region enter events
-  updateRegionUUIDs:
-    description: Updates regions to store playerIDs instead of usernames.
