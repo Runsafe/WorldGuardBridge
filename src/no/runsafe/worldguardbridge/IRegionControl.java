@@ -57,6 +57,8 @@ public interface IRegionControl
 
 	boolean redefineRegion(IWorld world, String name, ILocation pos1, ILocation pos2);
 
+	boolean renameRegion(IWorld world, String currentName, String newName);
+
 	boolean addMemberToRegion(IWorld world, String name, IPlayer player);
 
 	boolean removeMemberFromRegion(IWorld world, String name, IPlayer player);

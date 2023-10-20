@@ -423,6 +423,33 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	}
 
 	@Override
+	public boolean renameRegion(IWorld world, String currentName, String newName)
+	{
+		if (world == null || !serverHasWorldGuard())
+			return false;
+
+		RegionManager regionManager = worldGuard.getRegionManager(ObjectUnwrapper.convert(world));
+		ProtectedRegion existing = regionManager.getRegion(currentName);
+		if (existing == null)
+		{
+			debugger.debugFine("Region manager does not know anything about the region %s in world %s!", currentName, world.getName());
+			return false;
+		}
+		ProtectedRegion region = new ProtectedCuboidRegion(newName, existing.getMinimumPoint(), existing.getMaximumPoint());
+
+		// Copy details from the old region to the new one
+		region.setMembers(existing.getMembers());
+		region.setOwners(existing.getOwners());
+		region.setFlags(existing.getFlags());
+		region.setPriority(existing.getPriority());
+
+		// Replace region
+		regionManager.removeRegion(currentName);
+		regionManager.addRegion(region);
+		return this.saveRegionManager(regionManager);
+	}
+
+	@Override
 	public boolean addMemberToRegion(IWorld world, String name, IPlayer player)
 	{
 		if (!serverHasWorldGuard())
