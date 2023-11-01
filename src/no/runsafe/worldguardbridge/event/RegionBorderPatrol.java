@@ -166,6 +166,11 @@ public class RegionBorderPatrol implements IPlayerMove, IServerReady, IPlayerTel
 			return true;
 		}
 		ILocation lastLocation = lastPlayerLocations.get(player.getName());
+		if (!lastLocation.getWorld().equals(to.getWorld()))
+		{
+			lastPlayerLocations.put(player.getName(), to);
+			return true;
+		}
 		double delta = lastLocation.distance(to);
 		if (delta >= minMoveThreshold)
 		{
