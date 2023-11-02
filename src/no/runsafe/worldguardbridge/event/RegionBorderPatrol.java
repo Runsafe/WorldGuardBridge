@@ -39,8 +39,7 @@ public class RegionBorderPatrol implements IPlayerMove, IServerReady, IPlayerTel
 	@Override
 	public boolean OnPlayerMove(IPlayer player, ILocation from, ILocation to)
 	{
-		if (serverHasWorldGuard() && shouldCheckRegion(player, to))
-			CheckIfLeavingEnteringRegion(player, from, to);
+		if (serverHasWorldGuard() && shouldCheckRegion(player, to)) CheckIfLeavingEnteringRegion(player, from, to);
 		return true;
 	}
 
@@ -65,15 +64,13 @@ public class RegionBorderPatrol implements IPlayerMove, IServerReady, IPlayerTel
 	@Override
 	public void OnWorldLoad(IWorld world)
 	{
-		if (ready && serverHasWorldGuard())
-			loadWorldRegions(world);
+		if (ready && serverHasWorldGuard()) loadWorldRegions(world);
 	}
 
 	@Override
 	public void OnWorldUnload(IWorld world)
 	{
-		if (!ready || !serverHasWorldGuard())
-			return;
+		if (!ready || !serverHasWorldGuard()) return;
 
 		String worldName = world.getName();
 
@@ -91,8 +88,7 @@ public class RegionBorderPatrol implements IPlayerMove, IServerReady, IPlayerTel
 	private void flushRegions()
 	{
 		regions.clear();
-		if (!serverHasWorldGuard())
-			return;
+		if (!serverHasWorldGuard()) return;
 		for (IWorld world : server.getWorlds())
 			loadWorldRegions(world);
 	}
@@ -125,7 +121,8 @@ public class RegionBorderPatrol implements IPlayerMove, IServerReady, IPlayerTel
 		console.logInformation("&2Loaded &a%d&2 regions in world &a%s&2.", regionsInWorld.size(), worldName);
 	}
 
-	private void CheckIfLeavingEnteringRegion(IPlayer player, ILocation from, ILocation to) {
+	private void CheckIfLeavingEnteringRegion(IPlayer player, ILocation from, ILocation to)
+	{
 		IWorld fromWorld = from.getWorld();
 		IWorld toWorld = to.getWorld();
 
@@ -135,6 +132,7 @@ public class RegionBorderPatrol implements IPlayerMove, IServerReady, IPlayerTel
 			Map<String, ProtectedRegion> fromWorldRegions = regions.get(fromWorld.getName());
 			for (String region : fromWorldRegions.keySet())
 			{
+				debugger.debugFiner("Checking if player %s is leaving the region %s", player.getName(), region);
 				ProtectedRegion area = fromWorldRegions.get(region);
 				if (isInside(area, from, fromWorld) && !isInside(area, to, toWorld))
 				{
@@ -147,11 +145,13 @@ public class RegionBorderPatrol implements IPlayerMove, IServerReady, IPlayerTel
 		// Check if player is entering
 		if (!regions.containsKey(toWorld.getName()))
 		{
+			debugger.debugFine("World %s does not contain any known regions, skipping checks for entering regions", toWorld.getName());
 			return;
 		}
 		Map<String, ProtectedRegion> toWorldRegions = regions.get(toWorld.getName());
 		for (String region : toWorldRegions.keySet())
 		{
+			debugger.debugFiner("Checking if player %s is entering the region %s", player.getName(), region);
 			ProtectedRegion area = toWorldRegions.get(region);
 			if (!isInside(area, from, fromWorld) && isInside(area, to, toWorld))
 			{
@@ -163,34 +163,54 @@ public class RegionBorderPatrol implements IPlayerMove, IServerReady, IPlayerTel
 
 	private boolean isInside(ProtectedRegion area, ILocation location, IWorld world)
 	{
-		return world.equals(location.getWorld())
-				&& area.contains(location.getBlockX(), location.getBlockY(), location.getBlockZ());
+		return world.equals(location.getWorld()) && area.contains(
+			location.getBlockX(), location.getBlockY(), location.getBlockZ());
 	}
 
 	private boolean shouldCheckRegion(IPlayer player, ILocation to)
 	{
 		if (!lastPlayerLocations.containsKey(player.getName()))
 		{
+			debugger.debugFiner(
+				"Player %s is moving for the first time to %d,%d,%d@%s, scanning..", player.getName(), to.getX(), to.getY(),
+				to.getZ(), to.getWorld().getName()
+			);
 			lastPlayerLocations.put(player.getName(), to);
 			return true;
 		}
 		ILocation lastLocation = lastPlayerLocations.get(player.getName());
 		if (!lastLocation.getWorld().equals(to.getWorld()))
 		{
+			debugger.debugFiner(
+				"Player %s is moving from world %s to %d,%d,%d@%s, scanning..", player.getName(),
+				lastLocation.getWorld().getName(), to.getX(), to.getY(), to.getZ(), to.getWorld().getName()
+			);
 			lastPlayerLocations.put(player.getName(), to);
 			return true;
 		}
 		double delta = lastLocation.distance(to);
 		if (delta >= minMoveThreshold)
 		{
+			debugger.debugFiner(
+				"Player %s has moved %.2f blocks from %.2f,%.2f,%.2f to %.2f,%.2f,%.2f in world %s, scanning..",
+				player.getName(),
+				lastLocation.getX(), lastLocation.getY(), lastLocation.getZ(), to.getX(), to.getY(), to.getZ(),
+				to.getWorld().getName()
+			);
 			lastPlayerLocations.put(player.getName(), to);
 			return true;
 		}
+		debugger.debugFinest(
+			"Player has moved %.2f blocks from %.2f,%.2f,%.2f to %.2f,%.2f,%.2f@%s, not scanning.",
+			delta, lastLocation.getX(), lastLocation.getY(), lastLocation.getZ(), to.getX(), to.getY(), to.getZ(),
+			to.getWorld().getName()
+		);
 		return false;
 	}
 
 	private boolean serverHasWorldGuard()
 	{
+		debugger.debugFinest("Server WorldGuard is %s", WorldGuardPlugin.inst() == null ? "missing" : "available");
 		return WorldGuardPlugin.inst() != null;
 	}
 
