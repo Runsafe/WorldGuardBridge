@@ -18,6 +18,7 @@ import no.runsafe.framework.api.log.IDebug;
 import no.runsafe.framework.api.player.IPlayer;
 import no.runsafe.framework.internal.wrapper.ObjectUnwrapper;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -39,7 +40,9 @@ public class RegionBorderPatrol implements IPlayerMove, IServerReady, IPlayerTel
 	@Override
 	public boolean OnPlayerMove(IPlayer player, ILocation from, ILocation to)
 	{
-		if (serverHasWorldGuard() && shouldCheckRegion(player, to)) CheckIfLeavingEnteringRegion(player, from, to);
+		if (!serverHasWorldGuard()) return true;
+		ILocation checkFromLocation = shouldCheckRegion(player, from, to);
+		if (checkFromLocation != null) CheckIfLeavingEnteringRegion(player, checkFromLocation, to);
 		return true;
 	}
 
@@ -168,49 +171,42 @@ public class RegionBorderPatrol implements IPlayerMove, IServerReady, IPlayerTel
 			location.getBlockX(), location.getBlockY(), location.getBlockZ());
 	}
 
-	private boolean shouldCheckRegion(IPlayer player, ILocation to)
+	@Nullable
+	private ILocation shouldCheckRegion(IPlayer player, ILocation from, ILocation to)
 	{
 		if (!lastPlayerLocations.containsKey(player.getName()))
 		{
-			debugger.debugFiner(
-				"Player %s is moving for the first time to %.2f,%.2f,%.2f@%s, scanning..", player.getName(), to.getX(),
-				to.getY(),
-				to.getZ(), to.getWorld().getName()
+			debugger.debugFiner("Player %s is moving for the first time to %.2f,%.2f,%.2f@%s, recording location..",
+			                    player.getName(), to.getX(), to.getY(), to.getZ(), to.getWorld().getName()
 			);
 			lastPlayerLocations.put(player.getName(), to);
-			return true;
+			return from;
 		}
 		ILocation lastLocation = lastPlayerLocations.get(player.getName());
 		if (!lastLocation.getWorld().equals(to.getWorld()))
 		{
-			debugger.debugFiner(
-				"Player %s is moving from world %s to %.2f,%.2f,%.2f@%s, scanning..", player.getName(),
-				lastLocation.getWorld().getName(), to.getX(), to.getY(), to.getZ(), to.getWorld().getName()
+			debugger.debugFiner("Player %s is moving from world %s to %.2f,%.2f,%.2f@%s, scanning..", player.getName(),
+			                    lastLocation.getWorld().getName(), to.getX(), to.getY(), to.getZ(), to.getWorld().getName()
 			);
 			lastPlayerLocations.put(player.getName(), to);
-			return true;
+			return lastLocation;
 		}
 		double delta = lastLocation.distance(to);
 		if (delta >= minMoveThreshold)
 		{
 			debugger.debugFiner(
 				"Player %s has moved %.2f blocks from %.2f,%.2f,%.2f to %.2f,%.2f,%.2f in world %s, scanning..",
-				player.getName(), delta,
-				lastLocation.getX(), lastLocation.getY(), lastLocation.getZ(),
-				to.getX(), to.getY(), to.getZ(),
-				to.getWorld().getName()
+				player.getName(), delta, lastLocation.getX(), lastLocation.getY(), lastLocation.getZ(), to.getX(), to.getY(),
+				to.getZ(), to.getWorld().getName()
 			);
 			lastPlayerLocations.put(player.getName(), to);
-			return true;
+			return lastLocation;
 		}
-		debugger.debugFinest(
-			"Player %s has moved %.2f blocks from %.2f,%.2f,%.2f to %.2f,%.2f,%.2f@%s, not scanning.",
-			player.getName(), delta,
-			lastLocation.getX(), lastLocation.getY(), lastLocation.getZ(),
-			to.getX(), to.getY(), to.getZ(),
-			to.getWorld().getName()
+		debugger.debugFinest("Player %s has moved %.2f blocks from %.2f,%.2f,%.2f to %.2f,%.2f,%.2f@%s, not scanning.",
+		                     player.getName(), delta, lastLocation.getX(), lastLocation.getY(), lastLocation.getZ(),
+		                     to.getX(), to.getY(), to.getZ(), to.getWorld().getName()
 		);
-		return false;
+		return null;
 	}
 
 	private boolean serverHasWorldGuard()
