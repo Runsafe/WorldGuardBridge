@@ -172,7 +172,7 @@ public class RegionBorderPatrol implements IPlayerMove, IServerReady, IPlayerTel
 		if (!lastPlayerLocations.containsKey(player.getName()))
 		{
 			debugger.debugFiner(
-				"Player %s is moving for the first time to %d,%d,%d@%s, scanning..", player.getName(), to.getX(), to.getY(),
+				"Player %s is moving for the first time to %.2f,%.2f,%.2f@%s, scanning..", player.getName(), to.getX(), to.getY(),
 				to.getZ(), to.getWorld().getName()
 			);
 			lastPlayerLocations.put(player.getName(), to);
@@ -182,7 +182,7 @@ public class RegionBorderPatrol implements IPlayerMove, IServerReady, IPlayerTel
 		if (!lastLocation.getWorld().equals(to.getWorld()))
 		{
 			debugger.debugFiner(
-				"Player %s is moving from world %s to %d,%d,%d@%s, scanning..", player.getName(),
+				"Player %s is moving from world %s to %.2f,%.2f,%.2f@%s, scanning..", player.getName(),
 				lastLocation.getWorld().getName(), to.getX(), to.getY(), to.getZ(), to.getWorld().getName()
 			);
 			lastPlayerLocations.put(player.getName(), to);
