@@ -40,6 +40,7 @@
                 <attribute name="Class-Path" value="runsafe/framework.jar runsafe/joda-time-2.1.jar"/>
             </manifest>
             <fileset dir="${build.dir}" includes="plugin.yml"/>
+            <fileset dir="${src.dir}" includes="defaults.yml"/>
         </jar>
     </target>
 
