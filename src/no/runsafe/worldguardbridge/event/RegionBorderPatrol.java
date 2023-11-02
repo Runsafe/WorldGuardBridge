@@ -1,6 +1,7 @@
 package no.runsafe.worldguardbridge.event;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.ILocation;
@@ -105,10 +106,18 @@ public class RegionBorderPatrol implements IPlayerMove, IServerReady, IPlayerTel
 	 */
 	private void loadWorldRegions(IWorld world)
 	{
+		if (!serverHasWorldGuard())
+		{
+			return;
+		}
 		String worldName = world.getName();
-		Map<String, ProtectedRegion> regionsInWorld = WorldGuardPlugin.inst()
-				.getRegionManager(ObjectUnwrapper.convert(world))
-				.getRegions();
+		RegionManager regionManager = WorldGuardPlugin.inst().getRegionManager(ObjectUnwrapper.convert(world));
+		if (regionManager == null)
+		{
+			console.logWarning("&eNo region manager found for world &a%s&e.", worldName);
+			return;
+		}
+		Map<String, ProtectedRegion> regionsInWorld = regionManager.getRegions();
 
 		ConcurrentHashMap<String, ProtectedRegion> worldRegions = new ConcurrentHashMap<>(regionsInWorld);
 		regions.put(worldName, worldRegions);
