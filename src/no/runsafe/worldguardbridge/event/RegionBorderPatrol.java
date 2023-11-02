@@ -145,7 +145,8 @@ public class RegionBorderPatrol implements IPlayerMove, IServerReady, IPlayerTel
 		// Check if player is entering
 		if (!regions.containsKey(toWorld.getName()))
 		{
-			debugger.debugFine("World %s does not contain any known regions, skipping checks for entering regions", toWorld.getName());
+			debugger.debugFine(
+				"World %s does not contain any known regions, skipping checks for entering regions", toWorld.getName());
 			return;
 		}
 		Map<String, ProtectedRegion> toWorldRegions = regions.get(toWorld.getName());
@@ -172,7 +173,8 @@ public class RegionBorderPatrol implements IPlayerMove, IServerReady, IPlayerTel
 		if (!lastPlayerLocations.containsKey(player.getName()))
 		{
 			debugger.debugFiner(
-				"Player %s is moving for the first time to %.2f,%.2f,%.2f@%s, scanning..", player.getName(), to.getX(), to.getY(),
+				"Player %s is moving for the first time to %.2f,%.2f,%.2f@%s, scanning..", player.getName(), to.getX(),
+				to.getY(),
 				to.getZ(), to.getWorld().getName()
 			);
 			lastPlayerLocations.put(player.getName(), to);
@@ -193,16 +195,19 @@ public class RegionBorderPatrol implements IPlayerMove, IServerReady, IPlayerTel
 		{
 			debugger.debugFiner(
 				"Player %s has moved %.2f blocks from %.2f,%.2f,%.2f to %.2f,%.2f,%.2f in world %s, scanning..",
-				player.getName(),
-				lastLocation.getX(), lastLocation.getY(), lastLocation.getZ(), to.getX(), to.getY(), to.getZ(),
+				player.getName(), delta,
+				lastLocation.getX(), lastLocation.getY(), lastLocation.getZ(),
+				to.getX(), to.getY(), to.getZ(),
 				to.getWorld().getName()
 			);
 			lastPlayerLocations.put(player.getName(), to);
 			return true;
 		}
 		debugger.debugFinest(
-			"Player has moved %.2f blocks from %.2f,%.2f,%.2f to %.2f,%.2f,%.2f@%s, not scanning.",
-			delta, lastLocation.getX(), lastLocation.getY(), lastLocation.getZ(), to.getX(), to.getY(), to.getZ(),
+			"Player %s has moved %.2f blocks from %.2f,%.2f,%.2f to %.2f,%.2f,%.2f@%s, not scanning.",
+			player.getName(), delta,
+			lastLocation.getX(), lastLocation.getY(), lastLocation.getZ(),
+			to.getX(), to.getY(), to.getZ(),
 			to.getWorld().getName()
 		);
 		return false;
