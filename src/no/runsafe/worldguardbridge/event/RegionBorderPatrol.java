@@ -7,7 +7,6 @@ import no.runsafe.framework.api.IConfiguration;
 import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.IServer;
 import no.runsafe.framework.api.IWorld;
-import no.runsafe.framework.api.event.IAsyncEvent;
 import no.runsafe.framework.api.event.IServerReady;
 import no.runsafe.framework.api.event.player.IPlayerMove;
 import no.runsafe.framework.api.event.player.IPlayerTeleport;
@@ -23,7 +22,7 @@ import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IServerReady, IPlayerTeleport, IWorldLoad, IWorldUnload, IConfigurationChanged
+public class RegionBorderPatrol implements IPlayerMove, IServerReady, IPlayerTeleport, IWorldLoad, IWorldUnload, IConfigurationChanged
 {
 	public RegionBorderPatrol(IDebug output, IConsole console, IServer server)
 	{
@@ -35,7 +34,8 @@ public class RegionBorderPatrol implements IPlayerMove, IAsyncEvent, IServerRead
 	@Override
 	public boolean OnPlayerTeleport(IPlayer player, ILocation from, ILocation to)
 	{
-		return OnPlayerMove(player, from, to);
+		OnPlayerMove(player, from, to);
+		return true;
 	}
 
 	@Override
