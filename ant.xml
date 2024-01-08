@@ -6,10 +6,10 @@
     <property name="classes.dir" value="${build.dir}/classes"/>
     <property name="jar.dir" value="${build.dir}/jar"/>
     <property name="framework.dir" value="../../Framework"/>
-    <property name="worldedit.dir" value="../../WorldEditBridge"/>
+    <property name="WorldEditBridge.dir" value="../../WorldEditBridge"/>
     <property name="runsafe.dir" value="${framework.dir}/lastStable/archive/build/jar"/>
     <property name="lib.dir" value="${framework.dir}/workspace/lib"/>
-    <property name="worldedit-lib.dir" value="${worldedit.dir}/workspace/lib"/>
+    <property name="worldedit-lib.dir" value="${WorldEditBridge.dir}/workspace/lib"/>
 
     <path id="classpath">
         <fileset dir="${runsafe.dir}" includes="framework.jar"/>
