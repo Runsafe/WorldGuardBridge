@@ -7,10 +7,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="framework" level="project" />
-    <orderEntry type="library" name="WorldGuard" level="project" />
-    <orderEntry type="library" name="WorldEdit" level="project" />
+    <orderEntry type="module" module-name="Framework" />
+    <orderEntry type="library" name="worldguard" level="project" />
     <orderEntry type="library" name="spigot" level="project" />
+    <orderEntry type="library" name="WorldEdit" level="project" />
   </component>
 </module>
-
