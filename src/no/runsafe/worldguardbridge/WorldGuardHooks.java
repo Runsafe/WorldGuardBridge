@@ -16,13 +16,13 @@ public class WorldGuardHooks implements IPlayerBuildPermission, IPlayerPvPFlag
 	@Override
 	public boolean blockPlayerBuilding(IPlayer player, ILocation location)
 	{
-		return worldGuard.serverHasWorldGuard() && !worldGuard.playerCanBuildHere(player, location);
+		return !worldGuard.worldGuardIsMissing() && worldGuard.playerCannotBuildHere(player, location);
 	}
 
 	@Override
 	public boolean isPvPDisabled(IPlayer player)
 	{
-		if (!worldGuard.serverHasWorldGuard())
+		if (worldGuard.worldGuardIsMissing())
 			return false;
 
 		ILocation playerLocation = player.getLocation();
