@@ -5,6 +5,7 @@ import no.runsafe.framework.api.ILocation;
 import no.runsafe.framework.api.IWorld;
 import no.runsafe.framework.api.player.IPlayer;
 
+import javax.annotation.Nullable;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,7 @@ public interface IRegionControl
 
 	ILocation getRegionLocation(IWorld world, String name);
 
+	@Nullable
 	Set<String> getOwners(IWorld world, String name);
 
 	Set<UUID> getOwnerUniqueIds(IWorld world, String name);
