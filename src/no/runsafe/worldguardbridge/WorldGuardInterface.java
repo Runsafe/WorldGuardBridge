@@ -144,7 +144,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	/**
 	 * Gets a list of plot owner unique IDs world guard has stored.
 	 * If the player is stored by their username they will not have a UUID stored.
-	 * Players who have not been converted from being stored by their user names to UUIDs will not be returned.
+	 * Players who have not been converted from being stored by their usernames to UUIDs will not be returned.
 	 * @param world The world the region is in.
 	 * @param name Textual identifier of what the region is called.
 	 * @return Set of owner unique IDs.
@@ -177,7 +177,7 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	/**
 	 * Gets a list of plot member unique IDs world guard has stored.
 	 * If the player is stored by their username they will not have a UUID stored.
-	 * Players who have not been converted from being stored by their user names to UUIDs will not be returned.
+	 * Players who have not been converted from being stored by their usernames to UUIDs will not be returned.
 	 * @param world The world the region is in.
 	 * @param name Textual identifier of what the region is called.
 	 * @return Set of member unique IDs.
