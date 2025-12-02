@@ -61,8 +61,16 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	@Override
 	public boolean isInPvPZone(IPlayer player)
 	{
+		debugger.debugFine("Checking if player %s is in a pvp zone.", player.getName());
+
 		ApplicableRegionSet set = getRegions(player);
-		return set != null && set.size() != 0 && set.testState(unwrap(player), DefaultFlag.PVP);
+
+		if (set == null)
+			return false;
+
+		debugger.debugFine("Number of regions the player was found in: " + set.size());
+
+		return set.size() != 0 && set.testState(unwrap(player), DefaultFlag.PVP);
 	}
 
 	@Override
