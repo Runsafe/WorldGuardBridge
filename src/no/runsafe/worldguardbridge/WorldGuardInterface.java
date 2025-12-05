@@ -7,6 +7,8 @@ import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
+
+import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.managers.storage.StorageException;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
@@ -61,8 +63,31 @@ public class WorldGuardInterface implements IPluginEnabled, IRegionControl
 	@Override
 	public boolean isInPvPZone(IPlayer player)
 	{
+		debugger.debugFine("Checking if player %s is in a pvp zone.", player.getName());
+
 		ApplicableRegionSet set = getRegions(player);
-		return set != null && set.size() != 0 && set.testState(unwrap(player), DefaultFlag.PVP);
+
+		if (set == null)
+			return false;
+
+		debugger.debugFine("Number of regions the player was found in: " + set.size());
+
+		if (set.size() == 0)
+		{
+			ProtectedRegion globalRegion = getRegionByName(player.getWorld(), "__global__");
+
+			debugger.debugFine("Checking global region");
+
+			if (globalRegion == null)
+				return false;
+
+			debugger.debugFine("Found global region, checking pvp status");
+
+			if (StateFlag.test(globalRegion.getFlag(DefaultFlag.PVP)))
+				return true;
+		}
+
+		return set.testState(unwrap(player), DefaultFlag.PVP);
 	}
 
 	@Override
